@@ -1,4 +1,11 @@
 {
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "context7@claude-plugins-official": true,
+    "claude-mem@thedotmack": true,
+    "caveman@caveman": true,
+    "security-guidance@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
       "source": {
@@ -18,12 +25,5 @@
         "repo": "JuliusBrussee/caveman"
       }
     }
-  },
-  "enabledPlugins": {
-    "superpowers@superpowers-marketplace": true,
-    "context7@claude-plugins-official": true,
-    "claude-mem@thedotmack": true,
-    "caveman@caveman": true,
-    "security-guidance@claude-plugins-official": true
   }
 }
