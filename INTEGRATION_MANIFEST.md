@@ -46,6 +46,28 @@ stored — nothing was dropped.
 - **Catalyst_Admin_and_Licensing_Pack.zip** → `business/` (licensing terms,
   workspace map, VA handoff `.docx`).
 
+## Drop 3 — dashboards, hubs, master registry, command playbooks
+- **CatalystOS_AI_Hub_v2.html** → `web/ai-hub.html` (`/ai-hub`, 60 tools);
+  **CatalystOS_AI_Hub.html** (v1) → `web/ai-hub-v1.html`.
+- **catalyst_os_skills_hub.html** → `web/skills-hub.html` (`/skills/hub`);
+  the duplicate copy was dropped.
+- **CatalystOS_Dashboard.jsx**, **CatalystOS_SkillsOS.jsx** (one of two identical),
+  **catalystosaiarsenal.jsx**, and both **catalystskillvault.jsx** variants
+  (OS-packs + base) → `web/components/`.
+- **CATALYST_OS_MASTER_REGISTRY.json** (2,393 skills across 4 sources) →
+  `arsenal/reference/master-skills-registry.json`.
+- **catalystosclaudecode.zip** → `commands/` — Claude Code command playbooks by
+  project (chambers-legal, sneakers-fest, content-pipeline, smm-clients,
+  agent-teams).
+- **CatalystOS_v1.zip** → `reference/os-v1/`.
+- **CatalystOS_AI4AnimationPy_Integration.docx** → `business/`.
+
+## ⚡ Engine lit: the Skills Engine
+`app/skills_engine.py` — mounted at `/api/skills`. Reads the 50 real skill
+files and serves the API the Skills Cheatsheet promised: list, get-full-body,
+search, by-category, and smart-stacks. Works with **no external API keys** and
+is verified end-to-end (see the commit's test run).
+
 ## Skipped
 - Broken `mkdir` brace-expansion folders (`{autohedge,...}`, `{agents`) and
   `__pycache__` dirs — junk, not copied.

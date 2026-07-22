@@ -43,8 +43,14 @@ uvicorn app.main:app --reload --port 7001
 |-------|--------------|
 | `GET /` and `GET /services` | Catalyst Concepts services portfolio (HTML) |
 | `GET /ceo` | CEO business-card slide |
-| `GET /skills` · `GET /skills/cheatsheet` | Visual skills registry + printable cheatsheet |
+| `GET /skills` · `/skills/cheatsheet` · `/skills/hub` | Visual skills registry, cheatsheet, integration hub |
+| `GET /ai-hub` | 60-tool AI integration hub |
 | `GET /skills.json` | Every skill on the rack, grouped by category |
+| **`GET /api/skills`** ⚡ | **Skills Engine (lit):** list all skills + stacks |
+| **`GET /api/skills/{id}`** ⚡ | Full skill body (its instructions/system-prompt) |
+| **`GET /api/skills/search?q=`** ⚡ | Full-text search across all skills |
+| **`GET /api/skills/category/{cat}`** ⚡ | Skills in a category |
+| **`GET /api/skills/stack/{name}`** ⚡ | Resolve a pre-built smart stack |
 | `GET /status` | Whole-terminal health: arsenal + skills + video lane |
 | `GET /arsenal` | List every registered arsenal module |
 | `GET /arsenal/comfyui` | Full ComfyUI module record |

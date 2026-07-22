@@ -34,6 +34,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from arsenal.register_comfyui import router as comfyui_router
+from app.skills_engine import router as skills_router
 
 # --------------------------------------------------------------------------
 # Paths
@@ -59,6 +60,8 @@ app = FastAPI(
 
 # The ComfyUI video lane: /arsenal/comfyui, /arsenal/comfyui/health, /generate.
 app.include_router(comfyui_router)
+# The Skills Engine (lit): /api/skills, /search, /category, /stack, /{id}.
+app.include_router(skills_router)
 
 
 # --------------------------------------------------------------------------
@@ -200,6 +203,8 @@ WEB_PAGES: Dict[str, str] = {
     "ceo": "ceo-slide.html",
     "skills": "skills-registry.html",
     "skills/cheatsheet": "skills-cheatsheet.html",
+    "skills/hub": "skills-hub.html",
+    "ai-hub": "ai-hub.html",
 }
 
 
@@ -233,6 +238,18 @@ def skills_registry_page() -> HTMLResponse:
 def skills_cheatsheet_page() -> HTMLResponse:
     """Serve the printable skills cheatsheet."""
     return _serve_page("skills-cheatsheet.html")
+
+
+@app.get("/skills/hub", response_class=HTMLResponse, tags=["web"])
+def skills_hub_page() -> HTMLResponse:
+    """Serve the skills integration hub."""
+    return _serve_page("skills-hub.html")
+
+
+@app.get("/ai-hub", response_class=HTMLResponse, tags=["web"])
+def ai_hub_page() -> HTMLResponse:
+    """Serve the 60-tool AI integration hub."""
+    return _serve_page("ai-hub.html")
 
 
 @app.get("/skills.json", tags=["skills"])
