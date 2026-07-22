@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalyst Concepts — Services</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --void: #0A0A0A;
+    --forge: #FF6A00;
+    --off-white: #F0EDE6;
+    --dim: #888;
+    --card: #111111;
+    --border: #1E1E1E;
+    --accent2: #00C4FF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--off-white);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--off-white);
+  }
+
+  .wordmark span {
+    color: var(--forge);
+  }
+
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 96px 48px 80px;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--forge);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 700;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 0.95;
+    color: var(--off-white);
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+  }
+
+  .hero-title span {
+    color: var(--forge);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--dim);
+    max-width: 560px;
+    line-height: 1.7;
+    font-weight: 500;
+  }
+
+  .hero-sub strong {
+    color: var(--off-white);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .divider::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 64px;
+    height: 1px;
+    background: var(--forge);
+  }
+
+  /* SECTION */
+  section {
+    padding: 72px 48px;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--forge);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 2px;
+    color: var(--off-white);
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    color: var(--dim);
+    font-size: 14px;
+    margin-bottom: 48px;
+    max-width: 540px;
+    line-height: 1.7;
+  }
+
+  /* SERVICE STREAM GRID */
+  .streams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .stream-card {
+    background: var(--card);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+
+  .stream-card:hover {
+    background: #141414;
+  }
+
+  .stream-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--forge);
+    transition: height 0.3s ease;
+  }
+
+  .stream-card:hover::before {
+    height: 100%;
+  }
+
+  .stream-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: #1A1A1A;
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+    transition: color 0.2s;
+  }
+
+  .stream-card:hover .stream-number {
+    color: #222;
+  }
+
+  .stream-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--off-white);
+    margin-bottom: 8px;
+  }
+
+  .stream-tagline {
+    font-size: 13px;
+    color: var(--forge);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .stream-desc {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .service-list {
+    list-style: none;
+  }
+
+  .service-list li {
+    font-size: 13px;
+    color: #AAA;
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .service-list li::before {
+    content: '→';
+    color: var(--forge);
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* SKILLS SECTION */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .skill-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #CCC;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+  }
+
+  .skill-chip:hover {
+    border-color: var(--forge);
+    color: var(--off-white);
+    background: #131313;
+  }
+
+  .skill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--forge);
+    flex-shrink: 0;
+  }
+
+  /* AVAILABILITY */
+  .availability-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .avail-col-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--off-white);
+    margin-bottom: 20px;
+  }
+
+  .avail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .avail-label {
+    color: var(--dim);
+    font-weight: 500;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+
+  .badge.open {
+    background: #0A2212;
+    color: #00E070;
+    border: 1px solid #00E07044;
+  }
+
+  .badge.limited {
+    background: #1A1200;
+    color: #FFAA00;
+    border: 1px solid #FFAA0044;
+  }
+
+  .badge.closed {
+    background: #1A0A0A;
+    color: #FF4444;
+    border: 1px solid #FF444444;
+  }
+
+  .badge.anchor {
+    background: #0A0E1A;
+    color: var(--accent2);
+    border: 1px solid #00C4FF44;
+  }
+
+  /* CONTACT STRIP */
+  .cta-strip {
+    background: var(--forge);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .cta-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--void);
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+
+  .cta-sub {
+    font-size: 13px;
+    color: #3A1A00;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .cta-handles {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .handle {
+    background: var(--void);
+    color: var(--forge);
+    padding: 12px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .handle:hover {
+    background: #1A1A1A;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+
+  .footer-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #333;
+  }
+
+  @media (max-width: 768px) {
+    header, .hero, section, footer { padding-left: 24px; padding-right: 24px; }
+    .divider { margin: 0 24px; }
+    .availability-block { grid-template-columns: 1fr; gap: 32px; }
+    .cta-strip { padding: 32px 24px; }
+    .streams-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="wordmark">CATALYST <span>CONCEPTS</span></div>
+  <div class="header-tag">Lagos, Nigeria — Est. 2023</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">What we do</div>
+  <h1 class="hero-title">
+    Skills,
+    <span>Services &</span>
+    Availability
+  </h1>
+  <p class="hero-sub">
+    Five revenue streams. One operating system. 
+    <strong>We don't trade hours for Naira — we trade disruption and results.</strong> 
+    Here's what Catalyst Concepts actually does and how to work with us.
+  </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- REVENUE STREAMS -->
+<section>
+  <div class="section-label">Revenue Streams</div>
+  <div class="section-title">Five Lines of Operation</div>
+  <p class="section-desc">Every engagement runs through one of these five pillars. Each has its own deliverables, pricing logic, and team structure.</p>
+
+  <div class="streams-grid">
+
+    <!-- STREAM 1 -->
+    <div class="stream-card">
+      <div class="stream-number">01</div>
+      <div class="stream-name">Event Management</div>
+      <div class="stream-tagline">Flagship: Sneakers Fest 2026</div>
+      <p class="stream-desc">End-to-end event production from concept to post-event debrief. We handle the logistics, the sponsorships, the vendors, and the experience design.</p>
+      <ul class="service-list">
+        <li>Full event concept development and production</li>
+        <li>Sponsor acquisition and partnership management</li>
+        <li>Vendor sourcing, vetting and coordination</li>
+        <li>Venue negotiation and anchor tenancy pitches</li>
+        <li>Ticketing strategy and sales operations</li>
+        <li>Brand activation design and execution</li>
+        <li>Event team structure and delegation frameworks</li>
+        <li>Post-event sponsor reporting and debrief</li>
+        <li>Community activation events (government and private sector)</li>
+      </ul>
+    </div>
+
+    <!-- STREAM 2 -->
+    <div class="stream-card">
+      <div class="stream-number">02</div>
+      <div class="stream-name">Social Media Management</div>
+      <div class="stream-tagline">Retainer-Based Client Work</div>
+      <p class="stream-desc">We run client social accounts on a monthly retainer basis. Not just posting — strategy, community management, analytics, and reporting.</p>
+      <ul class="service-list">
+        <li>Monthly content calendar (30+ posts/month)</li>
+        <li>Multi-platform coverage: Instagram, X, TikTok, LinkedIn</li>
+        <li>Short-form video content direction and scripting</li>
+        <li>Community management with response SLAs</li>
+        <li>Brand voice documentation and enforcement</li>
+        <li>Monthly analytics reports and performance reviews</li>
+        <li>Competitor monitoring and trend response</li>
+        <li>Campaign planning and rollout (product launches, activations)</li>
+        <li>UGC-style content production workflows</li>
+        <li>90-day content pack creation</li>
+      </ul>
+    </div>
+
+    <!-- STREAM 3 -->
+    <div class="stream-card">
+      <div class="stream-number">03</div>
+      <div class="stream-name">Marketing & PR</div>
+      <div class="stream-tagline">Strategy, Positioning & Attention</div>
+      <p class="stream-desc">We build awareness campaigns that move, not just content that exists. From brand positioning to media placements and PR strategy.</p>
+      <ul class="service-list">
+        <li>Brand identity and positioning strategy</li>
+        <li>Marketing campaign planning and execution</li>
+        <li>Sponsorship deck and proposal development</li>
+        <li>Five-tier partnership framework design</li>
+        <li>Media outreach and press release writing</li>
+        <li>Influencer strategy and seeding campaigns</li>
+        <li>Marketing budget planning (Bootstrap, Growth, Scale tiers)</li>
+        <li>Radio and offline campaign planning</li>
+        <li>Lead magnet funnel design and build</li>
+        <li>Masterclass and product packaging strategy</li>
+      </ul>
+    </div>
+
+    <!-- STREAM 4 -->
+    <div class="stream-card">
+      <div class="stream-number">04</div>
+      <div class="stream-name">AI Automation Consulting</div>
+      <div class="stream-tagline">Systems That Work Without You</div>
+      <p class="stream-desc">We audit existing business operations and rebuild them with AI and automation infrastructure. For law firms, brands, and service businesses that want to operate smarter.</p>
+      <ul class="service-list">
+        <li>60-day AI integration blueprints for businesses</li>
+        <li>Workflow audit and automation gap analysis</li>
+        <li>Department-level AI rebuild queues</li>
+        <li>Document intelligence systems (legal, financial)</li>
+        <li>Client onboarding and proposal automation</li>
+        <li>Custom MCP server build and integration</li>
+        <li>AI-powered content pipeline setup</li>
+        <li>Multi-agent orchestration systems</li>
+        <li>Knowledge management infrastructure (Notion, Obsidian)</li>
+        <li>AI tool stack selection and deployment</li>
+        <li>Team AI training and SOP development</li>
+        <li>CatalystOS-style operating system builds for clients</li>
+      </ul>
+    </div>
+
+    <!-- STREAM 5 -->
+    <div class="stream-card">
+      <div class="stream-number">05</div>
+      <div class="stream-name">Content & IP</div>
+      <div class="stream-tagline">Publishing, Writing & Intellectual Property</div>
+      <p class="stream-desc">We create and monetize original intellectual property — from long-form Substack publications to comic universes and cultural analysis.</p>
+      <ul class="service-list">
+        <li>Substack newsletter strategy and production</li>
+        <li>Long-form essay and series writing</li>
+        <li>Content repurposing architecture (essay → carousel → reel → thread)</li>
+        <li>IP development: comic universes, story bibles, 12-issue arc planning</li>
+        <li>Cultural and psychological analysis content</li>
+        <li>Ghost-writing for executives and founders</li>
+        <li>Football media and culture writing (MatchdayMatrix, OffsideMind)</li>
+        <li>Mental framework creation and packaging</li>
+        <li>Paid content tier strategy and launch</li>
+        <li>Manuscript development and editorial planning</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SPECIALIST SKILLS -->
+<section>
+  <div class="section-label">Skills</div>
+  <div class="section-title">What I Actually Know How to Do</div>
+  <p class="section-desc">These are the individual competencies across all five streams. Not buzzwords — things with deliverables attached.</p>
+
+  <div class="skills-grid">
+    <div class="skill-chip"><span class="skill-dot"></span>Event production & logistics</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Sponsor pipeline management</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Venue negotiation</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Brand activation design</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Social media strategy</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Content calendar architecture</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Short-form video scripting</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Community management</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Brand voice development</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Campaign planning</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Influencer seeding strategy</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Sponsorship deck writing</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Marketing budget modelling</div>
+    <div class="skill-chip"><span class="skill-dot"></span>PR strategy & media outreach</div>
+    <div class="skill-chip"><span class="skill-dot"></span>AI workflow automation</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Prompt engineering</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Multi-agent system design</div>
+    <div class="skill-chip"><span class="skill-dot"></span>MCP server integration</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Document intelligence</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Knowledge base architecture</div>
+    <div class="skill-chip"><span class="skill-dot"></span>SOP development</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Team structure & delegation</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Long-form essay writing</div>
+    <div class="skill-chip"><span class="skill-dot"></span>IP development & story bibles</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Substack strategy</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Cultural psychology analysis</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Ghost-writing</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Mental framework creation</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Football media & culture writing</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Proposal & contract writing</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Cash flow forecasting</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Revenue modelling</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Operating system design</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Crisis & reputation management</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Lead magnet funnel design</div>
+    <div class="skill-chip"><span class="skill-dot"></span>24-person team management</div>
+    <div class="skill-chip"><span class="skill-dot"></span>WC2026 / sports content ops</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Airtable CRM management</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Social engineering & behaviour</div>
+    <div class="skill-chip"><span class="skill-dot"></span>Digital product packaging</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AVAILABILITY -->
+<section>
+  <div class="section-label">Availability</div>
+  <div class="section-title">Current Status by Stream</div>
+  <p class="section-desc">What's open, what's limited, and what's already committed for 2026.</p>
+
+  <div class="availability-block">
+    <div>
+      <div class="avail-col-title">Service Availability</div>
+
+      <div class="avail-item">
+        <span class="avail-label">Event Management — Sneakers Fest 2026</span>
+        <span class="badge anchor">ANCHOR PROJECT</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Event Management — New Client Events</span>
+        <span class="badge limited">LIMITED</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Social Media Management — New Retainers</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Marketing & PR — Campaign Work</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Marketing & PR — Brand Positioning</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">AI Automation Consulting — New Clients</span>
+        <span class="badge limited">LIMITED SLOTS</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Content Writing — Ghost-writing</span>
+        <span class="badge limited">LIMITED</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Content IP — External Collaborations</span>
+        <span class="badge open">SELECTIVE</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="avail-col-title">Engagement Types</div>
+
+      <div class="avail-item">
+        <span class="avail-label">Monthly Retainer (SMM)</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Project-Based (Events, Campaigns)</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">60-Day AI Consulting Blueprint</span>
+        <span class="badge limited">2 SLOTS</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Advisory / Strategic Consulting</span>
+        <span class="badge limited">BY REFERRAL</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">One-Off Deliverables</span>
+        <span class="badge open">OPEN</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Sneakers Fest Sponsorships</span>
+        <span class="badge open">ACTIVELY PITCHING</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Speaking / Masterclass Engagements</span>
+        <span class="badge open">OPEN — Q4 2026</span>
+      </div>
+      <div class="avail-item">
+        <span class="avail-label">Full Agency Management</span>
+        <span class="badge closed">NOT AVAILABLE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div>
+    <div class="cta-text">Ready to work?<br>Let's talk.</div>
+    <div class="cta-sub">Lagos, Nigeria — Available remotely across Africa</div>
+  </div>
+  <div class="cta-handles">
+    <a class="handle" href="https://x.com/Catalyst188" target="_blank">X: @CATALYST188</a>
+    <a class="handle" href="https://instagram.com/Catalystggg" target="_blank">IG: @CATALYSTGGG</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 CATALYST CONCEPTS — LAGOS, NIGERIA</p>
+  <div class="footer-mark">METAL DRAGON // FREEDOM YEAR</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,366 @@
+{
+  "config": {},
+  "extra": {
+    "ds": {
+      "offset": [
+        1438.5910560740222,
+        -7599.2381096232875
+      ],
+      "scale": 0.5128433662272232
+    },
+    "frontendVersion": "1.44.2",
+    "ue_links": [],
+    "workflowRendererVersion": "Vue-corrected"
+  },
+  "groups": [],
+  "id": "9994178c-856f-479e-8ba6-cda3daf4a117",
+  "last_link_id": 648,
+  "last_node_id": 358,
+  "links": [
+    [
+      643,
+      347,
+      0,
+      344,
+      0,
+      "VIDEO"
+    ],
+    [
+      645,
+      352,
+      0,
+      347,
+      1,
+      "IMAGE"
+    ],
+    [
+      646,
+      353,
+      0,
+      347,
+      2,
+      "IMAGE"
+    ],
+    [
+      647,
+      354,
+      0,
+      347,
+      3,
+      "IMAGE"
+    ],
+    [
+      648,
+      356,
+      0,
+      347,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "nodes": [
+    {
+      "flags": {
+        "collapsed": false
+      },
+      "id": 344,
+      "inputs": [
+        {
+          "link": 643,
+          "name": "video",
+          "type": "VIDEO"
+        }
+      ],
+      "mode": 0,
+      "order": 6,
+      "outputs": [],
+      "pos": [
+        450,
+        8270
+      ],
+      "properties": {},
+      "size": [
+        520,
+        720
+      ],
+      "type": "SaveVideo",
+      "widgets_values": [
+        "video/Seedance2.0_r2v",
+        "auto",
+        "auto"
+      ]
+    },
+    {
+      "bgcolor": "#653",
+      "color": "#432",
+      "flags": {},
+      "id": 347,
+      "inputs": [
+        {
+          "label": "image_1",
+          "link": 648,
+          "name": "model.reference_images.image_1",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "image_2",
+          "link": 645,
+          "name": "model.reference_images.image_2",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "image_3",
+          "link": 646,
+          "name": "model.reference_images.image_3",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "image_4",
+          "link": 647,
+          "name": "model.reference_images.image_4",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "image_5",
+          "link": null,
+          "name": "model.reference_images.image_5",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "video_1",
+          "link": null,
+          "name": "model.reference_videos.video_1",
+          "shape": 7,
+          "type": "VIDEO"
+        },
+        {
+          "label": "audio_1",
+          "link": null,
+          "name": "model.reference_audios.audio_1",
+          "shape": 7,
+          "type": "AUDIO"
+        }
+      ],
+      "mode": 0,
+      "order": 5,
+      "outputs": [
+        {
+          "links": [
+            643
+          ],
+          "name": "VIDEO",
+          "type": "VIDEO"
+        }
+      ],
+      "pos": [
+        20,
+        8270
+      ],
+      "properties": {
+        "Node name for S&R": "ByteDance2ReferenceNode"
+      },
+      "size": [
+        400,
+        480.984375
+      ],
+      "type": "ByteDance2ReferenceNode",
+      "widgets_values": [
+        "Seedance 2.0",
+        "fast-paced fashion showcase video, fisheye lens extreme wide-angle distortion, glitch transitions and digital distortion effects, first-person POV selfie perspective, the model is directly interacting with the camera (waving, gesturing, leaning in, moving close to the lens).\n\n[0:00-0:02] The model wears the FIRST reference outfit: cream fuzzy knit sweater, high-waisted light blue distressed straight-leg jeans, white low-top sneakers, brown leather crossbody bag, layered gold jewelry, white knit beanie. The outfit is fully visible, consistent in every frame, no replacement clothing, no missing items, no off-model garments. Scene: busy city street intersection, dynamic handheld camera movement, model leans in to take a mirror selfie, vibrant streetwear aesthetic.\n\n[0:02-0:04] Glitch transition to the SECOND reference outfit: white cropped tee, high-waisted wide-leg gray trousers, brown leather loafers, brown leather belt, round sunglasses, small white crossbody bag. The outfit is fully visible, consistent in every frame, no replacement clothing, no missing items, no off-model garments. Scene: minimalist urban sidewalk, model gestures to the camera, steps back to show full outfit, crisp neutral color grading.\n\n[0:04-0:07] Glitch transition to the THIRD reference outfit: vintage blue denim jacket, white inner tee, high-waisted black straight-leg pants, black combat boots, white canvas crossbody bag. The outfit is fully visible, consistent in every frame, no replacement clothing, no missing items, no off-model garments. Scene: city street with skyscrapers, model waves and moves dynamically, cinematic motion blur, hyper-realistic, consistent character throughout the entire video.\n\nvibrant color grading, cinematic motion blur, hyper-realistic, consistent character and outfit in each time segment, no outfit mixing, no off-model details, sharp focus on clothing details in every frame.",
+        "720p",
+        "1:1",
+        7,
+        true,
+        1077699876,
+        "randomize",
+        false
+      ]
+    },
+    {
+      "flags": {},
+      "id": 352,
+      "inputs": [],
+      "mode": 0,
+      "order": 0,
+      "outputs": [
+        {
+          "links": [
+            645
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -940,
+        8270
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        290,
+        370
+      ],
+      "type": "LoadImage",
+      "widgets_values": [
+        "sd_outfit_1.png",
+        "image"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 353,
+      "inputs": [],
+      "mode": 0,
+      "order": 1,
+      "outputs": [
+        {
+          "links": [
+            646
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -620,
+        8270
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        290,
+        370
+      ],
+      "type": "LoadImage",
+      "widgets_values": [
+        "sd_outfit_2.png",
+        "image"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 354,
+      "inputs": [],
+      "mode": 0,
+      "order": 2,
+      "outputs": [
+        {
+          "links": [
+            647
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -300,
+        8270
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        290,
+        370
+      ],
+      "type": "LoadImage",
+      "widgets_values": [
+        "sd_outfit_3.png",
+        "image"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 356,
+      "inputs": [],
+      "mode": 0,
+      "order": 3,
+      "outputs": [
+        {
+          "links": [
+            648
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -1260,
+        8270
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        290,
+        370
+      ],
+      "type": "LoadImage",
+      "widgets_values": [
+        "selfie_cartoon_style.png",
+        "image"
+      ]
+    },
+    {
+      "flags": {
+        "collapsed": false
+      },
+      "id": 358,
+      "inputs": [
+        {
+          "link": null,
+          "name": "video",
+          "type": "VIDEO"
+        }
+      ],
+      "mode": 0,
+      "order": 4,
+      "outputs": [],
+      "pos": [
+        1439.2481326759494,
+        8561.182627731647
+      ],
+      "properties": {},
+      "size": [
+        520,
+        720
+      ],
+      "type": "SaveVideo",
+      "widgets_values": [
+        "video/Seedance2.0_r2v",
+        "auto",
+        "auto"
+      ]
+    }
+  ],
+  "revision": 0,
+  "version": 0.4
+}

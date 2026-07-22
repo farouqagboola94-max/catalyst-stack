@@ -1,0 +1,109 @@
+{
+  "id": "comfyui",
+  "codename": "FORGE REEL",
+  "display_name": "ComfyUI",
+  "tier": "GRAIL",
+  "category": "video_generation_local",
+  "status": "REGISTERED",
+  "phase": "PHASE_0_REGISTERED",
+  "one_liner": "Local, zero token cost, node based engine for text to video and image to video plus audio, runs on your own hardware with no usage caps.",
+  "source": {
+    "repo": "https://github.com/comfyanonymous/ComfyUI",
+    "license": "GPL-3.0",
+    "license_verified": false,
+    "repo_verified": false,
+    "note": "Repo and license are high confidence from training, not freshly fetched. Confirm both before public use."
+  },
+  "runtime": {
+    "local": true,
+    "token_cost": 0,
+    "default_host": "127.0.0.1",
+    "default_port": 8188,
+    "port_verified": false,
+    "api_base": "http://127.0.0.1:8188",
+    "health_endpoint": "/system_stats",
+    "interface": ["web_node_graph", "rest_api", "websocket_queue"]
+  },
+  "routing": {
+    "lane": "LOCAL_ZERO_COST",
+    "switchboard_role": "video_lane",
+    "sits_beside": "odysseus (port 7000, local text/agent lane)",
+    "fallback_lane": "cloud_gpu (RunPod or Vast, rented per hour) when local VRAM is short"
+  },
+  "capabilities": [
+    "text_to_video",
+    "image_to_video",
+    "video_to_video",
+    "image_generation",
+    "audio_generation",
+    "multi_clip_composition_timeline",
+    "workflow_versioning",
+    "batch_generation",
+    "custom_node_extensions"
+  ],
+  "models_supported": {
+    "note": "Model availability moves fast. These run inside ComfyUI as of the Jan 2026 knowledge cutoff. Verify the current best video model before locking a pipeline.",
+    "video": ["Wan 2.1 / 2.2", "LTX-Video", "Hunyuan Video", "Mochi 1", "CogVideoX"],
+    "image": ["SDXL", "Flux", "SD 3.x"],
+    "confidence": "medium, recency sensitive"
+  },
+  "workflows": [
+    {
+      "file": "workflows/comfyui/seedance2_0_r2v.api.json",
+      "model": "Seedance 2.0",
+      "kind": "reference_to_video",
+      "project_code": "UGC_ADS",
+      "note": "Fashion showcase reference-to-video (fisheye POV, glitch outfit transitions). Exported from the ComfyUI web UI as a graph; re-save via 'Save (API format)' before POSTing to /arsenal/comfyui/generate."
+    }
+  ],
+  "project_mappings": [
+    {
+      "project_code": "WC2026",
+      "name": "World Cup 2026 content operation",
+      "use": "Cinematic b roll and motion pieces for OffsideMind essays, high energy clip beds for MatchdayMatrix. Zero cost per clip means you can mass produce through the July 19 run."
+    },
+    {
+      "project_code": "SNEAKFEST",
+      "name": "Sneakers Fest 2026",
+      "use": "Lagos Noir hype reels, sneaker reveal motion, sponsor teaser clips for the December 12 build up."
+    },
+    {
+      "project_code": "COMICIP",
+      "name": "Catalyst: The Awakening",
+      "use": "Animated panels, Ase VFX motion, issue trailers. Pairs with AI4AnimationPy already in the Tech Stack."
+    },
+    {
+      "project_code": "UGC_ADS",
+      "name": "UGC ads engine",
+      "use": "Local zero cost alternative and complement to the Higgsfield lane. Keeps spend off the paid pipe for volume drafts."
+    }
+  ],
+  "hardware_reality": {
+    "flag": "Local video generation needs a strong GPU with high VRAM. This is the real gate, not the software.",
+    "minimum_practical": "Roughly 12 GB VRAM for lighter models, 24 GB or more for the heavier video models, exact need depends on model and resolution.",
+    "vram_numbers_confidence": "approximate, verify against the specific model you pick",
+    "options": [
+      "Local GPU box if you have one in Lagos",
+      "Rented cloud GPU (RunPod, Vast) wired as the fallback lane, billed per hour",
+      "Hybrid: prototype workflows locally on a small model, batch the heavy renders on a rented GPU"
+    ]
+  },
+  "law_alignment": {
+    "efficiency_over_effort": "Systemized generation, no manual render farm.",
+    "infinite_abundance": "Zero marginal token cost per clip, volume is not gated by spend.",
+    "value_over_time": "One workflow, reused across every project lane."
+  },
+  "provenance": {
+    "discovered_via": "Uploaded reel, comment gated free open source local video generator",
+    "source_file": "Comment__VIDEO__to_get_this_free_open_source_video_generator_Everyone_s_been_asking_for_a_free_A.mp4",
+    "on_screen_evidence": [
+      "Free AI Video Generator RUNNING LOCALLY title card",
+      "open source, use without any limits, text or image input",
+      "multi clip timeline with Generating Audio Track",
+      "GitHub footage of the ComfyUI / OpenArt org (ComfyUI Manager, cls-spotlights ComfyUI Leadership Summit 2024, ComfyUI OpenArt fal API)"
+    ],
+    "identity_confidence": "medium. ComfyUI ecosystem is confirmed by the on screen GitHub footage. The specific timeline front end shown was not named on screen.",
+    "registered_on": "2026-06-16"
+  },
+  "schema_note": "Field names here are inferred to match the Open Source Arsenal pattern. Align keys to your actual registry schema before merge."
+}

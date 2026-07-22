@@ -1,103 +1,110 @@
-# CATALYST STACK — 300 Repo Fork Script
+# CATALYST STACK — The Terminal
 
-Automated fork script for 300 curated repositories across AI, ML, LLMs, agents, and development tools.
+CatalystOS backend surface. One FastAPI app ties the pieces together: the Open
+Source **Arsenal** (registered modules), the local zero-cost **video lane**
+(ComfyUI), the **Switchboard** that routes video jobs local-first with a cloud
+GPU fallback, the curated **300-repo fork script**, and the Catalyst Concepts
+**services portfolio**.
 
-## 📋 Categories (23)
+## 🗂 Layout
 
-1. **ComfyUI Core Ecosystem** (15 repos)
-2. **Image Generation Engines & UIs** (15 repos)
-3. **Video Generation Models** (15 repos)
-4. **Character Consistency & LoRA Training** (10 repos)
-5. **Face, Enhancement & Visual Tools** (10 repos)
-6. **Anime, Comic & Creative AI** (8 repos)
-7. **Audio Generation & Speech** (12 repos)
-8. **Local LLM & Inference** (12 repos)
-9. **AI Agent Frameworks** (15 repos)
-10. **RAG & Vector Databases** (10 repos)
-11. **FastAPI & Backend Infrastructure** (12 repos)
-12. **MCP Servers & Tools** (12 repos)
-13. **Web Scraping & Data Collection** (10 repos)
-14. **Media Download & Video Tools** (10 repos)
-15. **Social Media Automation** (10 repos)
-16. **Football & Sports Data (WC2026)** (8 repos)
-17. **Monitoring & Observability** (10 repos)
-18. **AI SDK & Dev Tools** (12 repos)
-19. **Deployment & Self-Hosting** (10 repos)
-20. **Data Viz, Dashboards & Workflow** (10 repos)
-21. **Computer Vision & ML Libraries** (10 repos)
-22. **Creative Content Pipelines** (10 repos)
-23. **Agentic AI Research & Tools** (8 repos)
+```
+app/
+  main.py                     # CatalystOS FastAPI app — mounts everything below
+arsenal/
+  register_comfyui.py         # video-lane router + idempotent registry upsert
+  comfyui.arsenal.json        # canonical ComfyUI module record (FORGE REEL, GRAIL)
+  registry/arsenal.json       # the merged arsenal registry (generated)
+workflows/
+  comfyui/seedance2_0_r2v.api.json  # Seedance 2.0 reference→video graph
+  README.md                   # graph-export vs API-format note
+web/
+  services.html               # Catalyst Concepts services portfolio
+docs/
+  comfyui_integration_runbook.md    # stand-up + wiring runbook
+fork_300.sh                   # 300-repo fork script
+.github/workflows/fork-300.yml      # monthly + manual fork automation
+requirements.txt
+```
 
-## 🚀 Usage
+## 🚀 Run the terminal
 
-### Option 1: Manual Execution
 ```bash
-# Clone this repo
-git clone https://github.com/YOUR_USERNAME/catalyst-stack.git
-cd catalyst-stack
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 7001
+```
 
-# Authenticate with GitHub
-gh auth login
+| Route | What it does |
+|-------|--------------|
+| `GET /` and `GET /services` | Catalyst Concepts services portfolio (HTML) |
+| `GET /status` | Whole-terminal health: arsenal count + video lane |
+| `GET /arsenal` | List every registered arsenal module |
+| `GET /arsenal/comfyui` | Full ComfyUI module record |
+| `GET /arsenal/comfyui/health` | Ping the local engine — clean `up: true/false` |
+| `POST /arsenal/comfyui/generate` | Queue a workflow on the local engine |
+| `POST /switchboard/video` | Route a video job local-first, cloud fallback |
+| `GET /docs` | Interactive API docs |
 
-# Run the script
+### Environment
+
+| Var | Purpose | Default |
+|-----|---------|---------|
+| `COMFYUI_API_BASE` | Local (or rented) ComfyUI engine | `http://127.0.0.1:8188` |
+| `COMFYUI_CLOUD_BASE` | Cloud GPU fallback for the Switchboard | *(unset → local only)* |
+| `ARSENAL_REGISTRY` | Path to the registry json | `arsenal/registry/arsenal.json` |
+
+## 🎬 Video lane (ComfyUI)
+
+The local, zero-token-cost video engine. Stand it up and wire it in with
+[`docs/comfyui_integration_runbook.md`](./docs/comfyui_integration_runbook.md).
+Re-register the module any time you edit its record (idempotent, upserts by id):
+
+```bash
+python arsenal/register_comfyui.py --registry arsenal/registry/arsenal.json
+```
+
+The Switchboard hits the local lane first; when the engine is offline (or you
+set `COMFYUI_CLOUD_BASE`) it falls back to the rented GPU and logs the lane
+choice so you can track the local-vs-paid split.
+
+## 🍴 300-repo fork script
+
+Forks 300 curated repos across 23 AI/ML categories into your personal account
+(you get admin on every fork).
+
+```bash
+gh auth login        # needs a token with repo + workflow scope
 bash fork_300.sh
 ```
 
-### Option 2: GitHub Actions (Automated)
-The workflow will:
-- Run automatically on the **first day of every month** at midnight UTC
-- Can also be triggered manually via the **Actions** tab
-- Automatically generates execution logs and reports
+Or let CI do it: [`.github/workflows/fork-300.yml`](./.github/workflows/fork-300.yml)
+runs on the 1st of each month and on manual **Run workflow**. It needs a
+`FORK_TOKEN` repo secret (PAT with `repo` + `workflow` scope) — the default
+`GITHUB_TOKEN` can't fork to a personal account.
 
-**To trigger manually:**
-1. Go to the **Actions** tab in this repository
-2. Select **Fork 300 Repositories**
-3. Click **Run workflow**
+<details>
+<summary>The 23 categories (300 repos)</summary>
 
-## 📊 Features
+1. ComfyUI Core Ecosystem (15) · 2. Image Generation Engines & UIs (15) ·
+3. Video Generation Models (15) · 4. Character Consistency & LoRA Training (10) ·
+5. Face, Enhancement & Visual Tools (10) · 6. Anime, Comic & Creative AI (8) ·
+7. Audio Generation & Speech (12) · 8. Local LLM & Inference (12) ·
+9. AI Agent Frameworks (15) · 10. RAG & Vector Databases (10) ·
+11. FastAPI & Backend Infrastructure (12) · 12. MCP Servers & Tools (12) ·
+13. Web Scraping & Data Collection (10) · 14. Media Download & Video Tools (10) ·
+15. Social Media Automation (10) · 16. Football & Sports Data — WC2026 (8) ·
+17. Monitoring & Observability (10) · 18. AI SDK & Dev Tools (12) ·
+19. Deployment & Self-Hosting (10) · 20. Data Viz, Dashboards & Workflow (10) ·
+21. Computer Vision & ML Libraries (10) · 22. Creative Content Pipelines (10) ·
+23. Agentic AI Research & Tools (8)
 
-✅ **300 repositories** across 23 AI/ML categories  
-✅ **Automatic forking** with gentle rate limiting (0.5s between forks)  
-✅ **Error handling** — skips already-forked repos  
-✅ **GitHub Actions automation** — scheduled monthly or manual triggers  
-✅ **Execution logs** — captured and stored as artifacts  
-✅ **Status reports** — visible in the workflow summary  
+</details>
 
-## ⚙️ Requirements
+## 🧩 Claude Code plugins
 
-- GitHub CLI (`gh`) installed and authenticated
-- GitHub account with fork permissions
-- (For Actions) Repository with GitHub Actions enabled
-
-## 📝 Notes
-
-- All forks will be created in your personal account
-- You'll have **admin access** to every fork
-- The script uses `--clone=false` to avoid cloning locally
-- Rate limiting prevents GitHub API throttling
-
-## 🔧 Customization
-
-Edit `fork_300.sh` to:
-- Add/remove repositories
-- Adjust rate limiting (change `sleep 0.5`)
-- Modify fork parameters
-
-Then commit and push changes:
-```bash
-git add fork_300.sh
-git commit -m "Update fork list"
-git push
-```
+This repo enables 5 Claude Code plugins for everyone who works in it — see
+[`.claude/PLUGINS.md`](./.claude/PLUGINS.md).
 
 ## 📜 License
 
 MIT
-
-## 🤝 Contributing
-
-Have a repo that should be included? Submit a PR or open an issue!
-
----
-
-**Status:** Ready to fork! 🚀
