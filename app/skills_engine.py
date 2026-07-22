@@ -73,7 +73,9 @@ def _index() -> Dict[str, Dict[str, Any]]:
     if not SKILLS_DIR.is_dir():
         return index
     for md in sorted(SKILLS_DIR.rglob("*.md")):
-        if md.name in ("README.md", "CLAUDE.md"):
+        # Skip docs, not skills: READMEs and any CLAUDE context file
+        # (CLAUDE.md, ROOT_CLAUDE.md, CATALYSTOS_MASTER_CLAUDE.md, ...).
+        if md.name == "README.md" or md.name.endswith("CLAUDE.md"):
             continue
         try:
             text = md.read_text(encoding="utf-8")

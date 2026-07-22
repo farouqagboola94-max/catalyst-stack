@@ -258,7 +258,7 @@ def skills_index() -> Dict[str, Any]:
     out: Dict[str, List[str]] = {}
     if SKILLS_DIR.is_dir():
         for md in sorted(SKILLS_DIR.rglob("*.md")):
-            if md.name in ("README.md", "CLAUDE.md"):
+            if md.name == "README.md" or md.name.endswith("CLAUDE.md"):
                 continue
             category = md.parent.name if md.parent != SKILLS_DIR else "root"
             out.setdefault(category, []).append(md.stem)
@@ -283,7 +283,7 @@ async def status() -> JSONResponse:
                 "cloud_fallback_configured": bool(CLOUD_GPU_BASE),
             },
             "portfolio_available": PORTFOLIO_HTML.exists(),
-            "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name not in ("README.md", "CLAUDE.md")]),
+            "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name != "README.md" and not p.name.endswith("CLAUDE.md")]),
             "web_pages": sorted(WEB_PAGES.keys()),
         }
     )
