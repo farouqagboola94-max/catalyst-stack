@@ -1,0 +1,17 @@
+{
+  "render_id": "E35B64D9",
+  "prompt": "Lagos entrepreneur walks Ikoyi, golden hour, confident",
+  "style": "afrofuturist",
+  "resolution": "1920x1080",
+  "aspect_ratio": "16:9",
+  "duration_sec": 10,
+  "fps": 24,
+  "total_frames": 240,
+  "estimated_gpu_seconds": 192.0,
+  "motion_type": "orbital",
+  "lighting": "iridescent",
+  "grain": 0.12,
+  "output_path": "/home/claude/CatalystOS/modules/open_higgsfield/renders/render_E35B64D9.mp4",
+  "status": "QUEUED",
+  "timestamp": "2026-04-30T03:10:33.950533"
+}

@@ -1,0 +1,33 @@
+{
+  "session_id": "HYG-40AB9DF2",
+  "avatar": {
+    "name": "The Catalyst",
+    "voice": "confident_afro_brit",
+    "expressions": [
+      "neutral",
+      "assertive",
+      "thoughtful",
+      "engaging"
+    ]
+  },
+  "segments": [
+    {
+      "id": 1,
+      "text": "The system is built.",
+      "expression": "neutral",
+      "duration_sec": 1.6,
+      "status": "QUEUED"
+    },
+    {
+      "id": 2,
+      "text": "Lagos 2026.",
+      "expression": "neutral",
+      "duration_sec": 0.8,
+      "status": "QUEUED"
+    }
+  ],
+  "total_duration_sec": 2.4,
+  "fps": 30,
+  "resolution": "1080p",
+  "status": "READY"
+}

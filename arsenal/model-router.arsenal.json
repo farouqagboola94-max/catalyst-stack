@@ -1,0 +1,35 @@
+{
+  "id": "model-router",
+  "codename": "THE SWITCHBOARD",
+  "display_name": "CatalystOS Model Router",
+  "tier": "CORE",
+  "category": "llm_router",
+  "status": "REGISTERED",
+  "one_liner": "One interface, every model. Sits between Claude Code and the providers, swaps the engine per task (Opus->heavy reasoning, Sonnet->code, Haiku->fast) so you pay only for what the task needs.",
+  "source": {
+    "repo": "https://github.com/musistudio/claude-code-router",
+    "license": "MIT",
+    "note": "Clean, key-safe build. Your keys stay in your env; no third-party proxy."
+  },
+  "runtime": {
+    "local": true,
+    "token_cost": 0,
+    "api_base": "http://127.0.0.1:3456",
+    "health_endpoint": "/",
+    "note": "Config lives at modules/model-router/config.json (providers read from $ENV vars). See modules/model-router/README.md."
+  },
+  "routing": {
+    "lane": "LLM_ROUTER",
+    "switchboard_role": "text_agent_lane",
+    "sits_beside": "comfyui (video lane)"
+  },
+  "capabilities": [
+    "multi_provider_routing",
+    "tier_based_model_selection",
+    "cost_control",
+    "openrouter_deepseek_gemini_anthropic_providers"
+  ],
+  "project_mappings": [
+    {"project_code": "ALL", "use": "Every text/agent job in the OS routes through here; the video lane (ComfyUI) sits beside it."}
+  ]
+}

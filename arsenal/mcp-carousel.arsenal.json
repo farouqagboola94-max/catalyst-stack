@@ -1,0 +1,16 @@
+{
+  "id": "mcp-carousel",
+  "codename": "FORGE CAROUSEL",
+  "display_name": "MCP Intelligence Carousel",
+  "tier": "UTILITY",
+  "category": "content_component",
+  "status": "REGISTERED",
+  "one_liner": "Interactive React carousel showcasing the Top 5 MCP servers 7-figure businesses run on — Lagos Noir design language.",
+  "source": {"repo": "local", "license": "internal", "note": "React component; build/serve from modules/mcp-carousel. See its package.json."},
+  "runtime": {"local": true, "token_cost": 0, "note": "Front-end component, not an HTTP engine. npm install && build inside the module."},
+  "routing": {"lane": "CONTENT", "switchboard_role": "component"},
+  "capabilities": ["carousel_ui", "mcp_showcase", "lagos_noir_design"],
+  "project_mappings": [
+    {"project_code": "MARKETING", "use": "Embeddable proof-of-competence component for AI consulting pitches."}
+  ]
+}

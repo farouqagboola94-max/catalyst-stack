@@ -1,0 +1,33 @@
+{
+  "session_id": "HYG-3322B42D",
+  "avatar": {
+    "name": "The Catalyst",
+    "voice": "confident_afro_brit",
+    "expressions": [
+      "neutral",
+      "assertive",
+      "thoughtful",
+      "engaging"
+    ]
+  },
+  "segments": [
+    {
+      "id": 1,
+      "text": "The system is built.",
+      "expression": "neutral",
+      "duration_sec": 1.6,
+      "status": "QUEUED"
+    },
+    {
+      "id": 2,
+      "text": "The era has begun.",
+      "expression": "neutral",
+      "duration_sec": 1.6,
+      "status": "QUEUED"
+    }
+  ],
+  "total_duration_sec": 3.2,
+  "fps": 30,
+  "resolution": "1080p",
+  "status": "READY"
+}

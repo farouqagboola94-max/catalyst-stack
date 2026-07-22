@@ -122,6 +122,118 @@
         "registered_on": "2026-06-16"
       },
       "schema_note": "Field names here are inferred to match the Open Source Arsenal pattern. Align keys to your actual registry schema before merge."
+    },
+    {
+      "id": "mcp-carousel",
+      "codename": "FORGE CAROUSEL",
+      "display_name": "MCP Intelligence Carousel",
+      "tier": "UTILITY",
+      "category": "content_component",
+      "status": "REGISTERED",
+      "one_liner": "Interactive React carousel showcasing the Top 5 MCP servers 7-figure businesses run on — Lagos Noir design language.",
+      "source": {
+        "repo": "local",
+        "license": "internal",
+        "note": "React component; build/serve from modules/mcp-carousel. See its package.json."
+      },
+      "runtime": {
+        "local": true,
+        "token_cost": 0,
+        "note": "Front-end component, not an HTTP engine. npm install && build inside the module."
+      },
+      "routing": {
+        "lane": "CONTENT",
+        "switchboard_role": "component"
+      },
+      "capabilities": [
+        "carousel_ui",
+        "mcp_showcase",
+        "lagos_noir_design"
+      ],
+      "project_mappings": [
+        {
+          "project_code": "MARKETING",
+          "use": "Embeddable proof-of-competence component for AI consulting pitches."
+        }
+      ]
+    },
+    {
+      "id": "model-router",
+      "codename": "THE SWITCHBOARD",
+      "display_name": "CatalystOS Model Router",
+      "tier": "CORE",
+      "category": "llm_router",
+      "status": "REGISTERED",
+      "one_liner": "One interface, every model. Sits between Claude Code and the providers, swaps the engine per task (Opus->heavy reasoning, Sonnet->code, Haiku->fast) so you pay only for what the task needs.",
+      "source": {
+        "repo": "https://github.com/musistudio/claude-code-router",
+        "license": "MIT",
+        "note": "Clean, key-safe build. Your keys stay in your env; no third-party proxy."
+      },
+      "runtime": {
+        "local": true,
+        "token_cost": 0,
+        "api_base": "http://127.0.0.1:3456",
+        "health_endpoint": "/",
+        "note": "Config lives at modules/model-router/config.json (providers read from $ENV vars). See modules/model-router/README.md."
+      },
+      "routing": {
+        "lane": "LLM_ROUTER",
+        "switchboard_role": "text_agent_lane",
+        "sits_beside": "comfyui (video lane)"
+      },
+      "capabilities": [
+        "multi_provider_routing",
+        "tier_based_model_selection",
+        "cost_control",
+        "openrouter_deepseek_gemini_anthropic_providers"
+      ],
+      "project_mappings": [
+        {
+          "project_code": "ALL",
+          "use": "Every text/agent job in the OS routes through here; the video lane (ComfyUI) sits beside it."
+        }
+      ]
+    },
+    {
+      "id": "reddit-intelligence",
+      "codename": "DEEP LISTENING",
+      "display_name": "CatalystOS Reddit Intelligence",
+      "tier": "UTILITY",
+      "category": "audience_intelligence",
+      "status": "REGISTERED",
+      "one_liner": "Extract actionable content strategy from real audience psychology on Reddit — mines subreddits for pain points, language, and hooks.",
+      "source": {
+        "repo": "local",
+        "license": "internal",
+        "note": "Needs Reddit (PRAW) + Anthropic keys in env; see modules/reddit-intelligence/.env.example."
+      },
+      "runtime": {
+        "local": true,
+        "token_cost": 0,
+        "note": "Python module + CLI (reddit_cli.py). Not an HTTP engine; run via CLI or import."
+      },
+      "routing": {
+        "lane": "INTELLIGENCE",
+        "switchboard_role": "research_lane"
+      },
+      "capabilities": [
+        "subreddit_mining",
+        "pain_point_extraction",
+        "audience_language_analysis",
+        "content_hook_generation",
+        "sheets_export"
+      ],
+      "project_mappings": [
+        {
+          "project_code": "SMM",
+          "use": "Feed real audience language into client social strategy."
+        },
+        {
+          "project_code": "SUBSTACK",
+          "use": "Source essay angles from live discourse."
+        }
+      ]
     }
   ]
 }

@@ -11,19 +11,24 @@ GPU fallback, the curated **300-repo fork script**, and the Catalyst Concepts
 ```
 app/
   main.py                     # CatalystOS FastAPI app — mounts everything below
-arsenal/
+arsenal/                      # the rack — one *.arsenal.json card per tool (auto-discovered)
+  comfyui / model-router / reddit-intelligence / mcp-carousel  (.arsenal.json)
   register_comfyui.py         # video-lane router + idempotent registry upsert
-  comfyui.arsenal.json        # canonical ComfyUI module record (FORGE REEL, GRAIL)
-  registry/arsenal.json       # the merged arsenal registry (generated)
-workflows/
-  comfyui/seedance2_0_r2v.api.json  # Seedance 2.0 reference→video graph
-  README.md                   # graph-export vs API-format note
-web/
-  services.html               # Catalyst Concepts services portfolio
-docs/
-  comfyui_integration_runbook.md    # stand-up + wiring runbook
-fork_300.sh                   # 300-repo fork script
-.github/workflows/fork-300.yml      # monthly + manual fork automation
+  _TEMPLATE.arsenal.json      # copy this to add a tool
+  registry/arsenal.json       # compiled snapshot (generated)
+  reference/                  # the rich master arsenal registry + tier docs
+skills/                       # 50 skill .md across 11 categories + skills.sh CLI
+workflows/comfyui/            # tuned ComfyUI graphs (Seedance 2.0 reference→video)
+web/                          # served HTML: services, ceo-slide, skills-registry, cheatsheet
+  seo/                        # SEO head-patch snippets
+  components/                 # React sources (org chart, switchboard, pipeline)
+modules/                      # self-contained engines: model-router, reddit-intelligence,
+                              #   mcp-carousel, hyperframes, vibe_trading, obsidian, ...
+business/                     # licensing terms, workspace map, VA handoff (.docx)
+reference/                    # os-v2 / os-v2-final orchestrators + indexes
+docs/comfyui_integration_runbook.md
+fork_300.sh + .github/workflows/fork-300.yml
+INTEGRATION_MANIFEST.md       # where every uploaded artifact landed
 requirements.txt
 ```
 
@@ -37,7 +42,10 @@ uvicorn app.main:app --reload --port 7001
 | Route | What it does |
 |-------|--------------|
 | `GET /` and `GET /services` | Catalyst Concepts services portfolio (HTML) |
-| `GET /status` | Whole-terminal health: arsenal count + video lane |
+| `GET /ceo` | CEO business-card slide |
+| `GET /skills` · `GET /skills/cheatsheet` | Visual skills registry + printable cheatsheet |
+| `GET /skills.json` | Every skill on the rack, grouped by category |
+| `GET /status` | Whole-terminal health: arsenal + skills + video lane |
 | `GET /arsenal` | List every registered arsenal module |
 | `GET /arsenal/comfyui` | Full ComfyUI module record |
 | `GET /arsenal/comfyui/health` | Ping the local engine — clean `up: true/false` |

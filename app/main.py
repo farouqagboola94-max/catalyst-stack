@@ -187,16 +187,66 @@ async def route_video_job(payload: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # --------------------------------------------------------------------------
-# Portfolio + root
+# Portfolio + web pages
 # --------------------------------------------------------------------------
+
+WEB_DIR = REPO_ROOT / "web"
+SKILLS_DIR = REPO_ROOT / "skills"
+
+# Named static HTML pages served by the terminal. Add a file to web/ and a
+# line here to publish it.
+WEB_PAGES: Dict[str, str] = {
+    "services": "services.html",
+    "ceo": "ceo-slide.html",
+    "skills": "skills-registry.html",
+    "skills/cheatsheet": "skills-cheatsheet.html",
+}
+
+
+def _serve_page(filename: str) -> HTMLResponse:
+    path = WEB_DIR / filename
+    if path.exists():
+        return HTMLResponse(path.read_text(encoding="utf-8"))
+    raise HTTPException(status_code=404, detail=f"Missing {filename}")
+
 
 @app.get("/", response_class=HTMLResponse, tags=["web"])
 @app.get("/services", response_class=HTMLResponse, tags=["web"])
 def services_portfolio() -> HTMLResponse:
     """Serve the Catalyst Concepts services portfolio page."""
-    if PORTFOLIO_HTML.exists():
-        return HTMLResponse(PORTFOLIO_HTML.read_text(encoding="utf-8"))
-    raise HTTPException(status_code=404, detail=f"Missing {PORTFOLIO_HTML.name}")
+    return _serve_page("services.html")
+
+
+@app.get("/ceo", response_class=HTMLResponse, tags=["web"])
+def ceo_card() -> HTMLResponse:
+    """Serve the CEO business-card slide."""
+    return _serve_page("ceo-slide.html")
+
+
+@app.get("/skills", response_class=HTMLResponse, tags=["web"])
+def skills_registry_page() -> HTMLResponse:
+    """Serve the visual skills registry page."""
+    return _serve_page("skills-registry.html")
+
+
+@app.get("/skills/cheatsheet", response_class=HTMLResponse, tags=["web"])
+def skills_cheatsheet_page() -> HTMLResponse:
+    """Serve the printable skills cheatsheet."""
+    return _serve_page("skills-cheatsheet.html")
+
+
+@app.get("/skills.json", tags=["skills"])
+def skills_index() -> Dict[str, Any]:
+    """List every skill markdown file on the rack, grouped by category folder."""
+    out: Dict[str, List[str]] = {}
+    if SKILLS_DIR.is_dir():
+        for md in sorted(SKILLS_DIR.rglob("*.md")):
+            if md.name in ("README.md", "CLAUDE.md"):
+                continue
+            category = md.parent.name if md.parent != SKILLS_DIR else "root"
+            out.setdefault(category, []).append(md.stem)
+    total = sum(len(v) for v in out.values())
+    return {"total_skills": total, "categories": out}
 
 
 @app.get("/status", tags=["system"])
@@ -216,5 +266,7 @@ async def status() -> JSONResponse:
                 "cloud_fallback_configured": bool(CLOUD_GPU_BASE),
             },
             "portfolio_available": PORTFOLIO_HTML.exists(),
+            "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name not in ("README.md", "CLAUDE.md")]),
+            "web_pages": sorted(WEB_PAGES.keys()),
         }
     )

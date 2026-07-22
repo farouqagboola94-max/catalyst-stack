@@ -1,0 +1,216 @@
+[
+  {
+    "id": "TASK-986976C6",
+    "agent": "TestAgent",
+    "task": "Test task",
+    "action": "Do something",
+    "payload": "medium",
+    "priority": "medium",
+    "priority_rank": 3,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-29T18:27:14.637778",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-C7E2CBC7",
+    "agent": "LegalAgent",
+    "task": "Draft affidavit for matter 004",
+    "action": "Generate affidavit for Abegbe Agboola Chambers",
+    "payload": {
+      "document_type": "affidavit",
+      "case_notes": "Client alleges breach of contract..."
+    },
+    "priority": "high",
+    "priority_rank": 2,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-29T18:32:35.742630",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-FCBD95B6",
+    "agent": "ContentAgent",
+    "task": "Post Great Sabotage Part 10",
+    "action": "Publish content to Substack",
+    "payload": {
+      "platform": "Substack",
+      "brief": "The article is about upstream thinking..."
+    },
+    "priority": "medium",
+    "priority_rank": 3,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-29T18:32:35.743874",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-88C8A52F",
+    "agent": "AutoHedgeExecutor",
+    "task": "Execute BUY order for AAPL",
+    "action": "BUY $5,000.00 of AAPL",
+    "payload": {
+      "ticker": "AAPL",
+      "action": "BUY",
+      "amount": 5000
+    },
+    "priority": "critical",
+    "priority_rank": 1,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-29T18:32:35.744937",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-75D1C458",
+    "agent": "SneakersFestAgent",
+    "task": "Book DJ for Sneakers Fest",
+    "action": "Commit \u20a6250,000 to vendor: SoundLab Lagos",
+    "payload": {
+      "vendor": "SoundLab Lagos",
+      "commitment": 250000
+    },
+    "priority": "high",
+    "priority_rank": 2,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-29T18:32:35.746231",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-2215B814",
+    "agent": "LegalAgent",
+    "task": "Draft affidavit for matter 004",
+    "action": "Generate affidavit for Abegbe Agboola Chambers",
+    "payload": {
+      "document_type": "affidavit",
+      "case_notes": "Client alleges breach of contract..."
+    },
+    "priority": "high",
+    "priority_rank": 2,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-30T03:10:33.848101",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-699D483C",
+    "agent": "ContentAgent",
+    "task": "Post Great Sabotage Part 10",
+    "action": "Publish content to Substack",
+    "payload": {
+      "platform": "Substack",
+      "brief": "The article is about upstream thinking..."
+    },
+    "priority": "medium",
+    "priority_rank": 3,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-30T03:10:33.849222",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-C7D6521D",
+    "agent": "AutoHedgeExecutor",
+    "task": "Execute BUY order for AAPL",
+    "action": "BUY $5,000.00 of AAPL",
+    "payload": {
+      "ticker": "AAPL",
+      "action": "BUY",
+      "amount": 5000
+    },
+    "priority": "critical",
+    "priority_rank": 1,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-30T03:10:33.850044",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-A672073E",
+    "agent": "SneakersFestAgent",
+    "task": "Book DJ for Sneakers Fest",
+    "action": "Commit \u20a6250,000 to vendor: SoundLab Lagos",
+    "payload": {
+      "vendor": "SoundLab Lagos",
+      "commitment": 250000
+    },
+    "priority": "high",
+    "priority_rank": 2,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-04-30T03:10:33.850946",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-431BC2DF",
+    "agent": "AutoHedgeExecutor",
+    "task": "Execute BUY order for AAPL",
+    "action": "BUY $2,500.00 of AAPL @ $213.45",
+    "payload": {
+      "ticker": "AAPL",
+      "action": "BUY",
+      "amount": 2500.0
+    },
+    "priority": "critical",
+    "priority_rank": 1,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-05-08T02:12:35.827959",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-1161FA01",
+    "agent": "HiggsFieldRenderer",
+    "task": "Render full Sneakers Fest video pack",
+    "action": "Start GPU render batch \u2014 5 videos",
+    "payload": {
+      "renders": 5
+    },
+    "priority": "high",
+    "priority_rank": 2,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-05-08T02:13:35.063303",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  },
+  {
+    "id": "TASK-831AC05E",
+    "agent": "HeyGenStudio",
+    "task": "Render avatar hype video",
+    "action": "Render HYG-558841D3",
+    "payload": {
+      "session": "HYG-558841D3"
+    },
+    "priority": "medium",
+    "priority_rank": 3,
+    "requires_approval": true,
+    "status": "PENDING",
+    "submitted_at": "2026-05-08T02:13:35.079236",
+    "resolved_at": null,
+    "resolution": null,
+    "notes": null
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "session_id": "HYG-558841D3",
+  "avatar": {
+    "name": "Sneakers Fest Host",
+    "voice": "energetic_lagos",
+    "expressions": [
+      "excited",
+      "hype",
+      "engaging",
+      "neutral"
+    ]
+  },
+  "segments": [
+    {
+      "id": 1,
+      "text": "Lagos. It's time.",
+      "expression": "hype",
+      "duration_sec": 1.2,
+      "status": "QUEUED"
+    },
+    {
+      "id": 2,
+      "text": "Sneakers Fest 2026 \u2014 Eko Convention Centre, Lagos \u2014 July 19, 2026.",
+      "expression": "excited",
+      "duration_sec": 4.8,
+      "status": "QUEUED"
+    },
+    {
+      "id": 3,
+      "text": "West Africa's biggest sneaker festival.",
+      "expression": "hype",
+      "duration_sec": 2.0,
+      "status": "QUEUED"
+    },
+    {
+      "id": 4,
+      "text": "Register now. Limited spots.",
+      "expression": "engaging",
+      "duration_sec": 1.6,
+      "status": "QUEUED"
+    }
+  ],
+  "total_duration_sec": 9.6,
+  "fps": 30,
+  "resolution": "1080p",
+  "status": "READY"
+}

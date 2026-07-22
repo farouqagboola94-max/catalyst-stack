@@ -1,0 +1,17 @@
+{
+  "render_id": "FCD4971A",
+  "prompt": "Lagos entrepreneur, golden hour, Ikoyi",
+  "style": "afrofuturist",
+  "resolution": "1080x1920",
+  "aspect_ratio": "9:16",
+  "duration_sec": 15,
+  "fps": 24,
+  "total_frames": 360,
+  "estimated_gpu_seconds": 288.0,
+  "motion_type": "orbital",
+  "lighting": "iridescent",
+  "grain": 0.12,
+  "output_path": "/home/claude/CatalystOS/modules/open_higgsfield/renders/render_FCD4971A.mp4",
+  "status": "QUEUED",
+  "timestamp": "2026-05-08T02:12:36.399418"
+}

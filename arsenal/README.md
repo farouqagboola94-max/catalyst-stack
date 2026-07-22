@@ -36,6 +36,12 @@ live engine* (like ComfyUI does), it additionally ships a small router:
 | id | codename | category |
 |----|----------|----------|
 | `comfyui` | FORGE REEL | video_generation_local |
+| `model-router` | THE SWITCHBOARD | llm_router |
+| `reddit-intelligence` | DEEP LISTENING | audience_intelligence |
+| `mcp-carousel` | FORGE CAROUSEL | content_component |
+
+The rich master registry (many more tools, tiers, revenue-stream mappings) is
+kept for reference in [`reference/arsenal-registry.json`](./reference/arsenal-registry.json).
 
 Just tell me the name + drop the file, and I'll write the card (and the router,
 if it needs one) for you.
