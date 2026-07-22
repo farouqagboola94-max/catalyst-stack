@@ -40,8 +40,9 @@ from arsenal.register_comfyui import router as comfyui_router
 # --------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+ARSENAL_DIR = Path(os.environ.get("ARSENAL_DIR", REPO_ROOT / "arsenal"))
 REGISTRY_PATH = Path(
-    os.environ.get("ARSENAL_REGISTRY", REPO_ROOT / "arsenal" / "registry" / "arsenal.json")
+    os.environ.get("ARSENAL_REGISTRY", ARSENAL_DIR / "registry" / "arsenal.json")
 )
 PORTFOLIO_HTML = REPO_ROOT / "web" / "services.html"
 
@@ -65,6 +66,31 @@ app.include_router(comfyui_router)
 # --------------------------------------------------------------------------
 
 def _load_registry() -> Dict[str, Any]:
+    """The arsenal is whatever cards are on the rack.
+
+    Every ``arsenal/*.arsenal.json`` file is a module card and is the source of
+    truth. Drop a new card in that folder and it shows up here — no code change,
+    no rebuild. Files starting with ``_`` (e.g. the template) are skipped.
+
+    Falls back to the compiled ``registry/arsenal.json`` snapshot if the folder
+    can't be scanned (e.g. a packaged deploy).
+    """
+    modules: List[Dict[str, Any]] = []
+    seen: set = set()
+    if ARSENAL_DIR.is_dir():
+        for card_path in sorted(ARSENAL_DIR.glob("*.arsenal.json")):
+            if card_path.name.startswith("_"):
+                continue
+            try:
+                card = json.loads(card_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                continue
+            mod_id = card.get("id")
+            if mod_id and mod_id not in seen:
+                seen.add(mod_id)
+                modules.append(card)
+    if modules:
+        return {"modules": modules}
     if REGISTRY_PATH.exists():
         return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
     return {"modules": []}
