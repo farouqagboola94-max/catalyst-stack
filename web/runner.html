@@ -34,13 +34,17 @@
 </style>
 
 <header>
-  <div class="brand">CATALYST<b>OS</b> · SKILL RUNNER</div>
-  <div id="brain" class="brainpill">brain: …</div>
+  <div class="brand">CATALYST<b>OS</b> · RUNNER</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div id="brain" class="brainpill">brain: …</div>
+    <div id="vpill" class="brainpill">video: …</div>
+  </div>
 </header>
 
 <div class="wrap">
   <div class="side">
     <input id="filter" placeholder="filter…" style="width:100%;background:#0d0d0d;border:1px solid var(--border);color:var(--off);padding:8px 10px;font-family:inherit;font-size:12px;outline:none;border-radius:3px">
+    <div id="videos"></div>
     <div id="stacks"></div>
     <div id="skills"></div>
   </div>
@@ -54,14 +58,28 @@ const $ = s => document.querySelector(s);
 let SEL = null; // {type:'skill'|'stack', id}
 
 async function boot(){
-  // brain status
+  // brain + video status
   try{
     const st = await (await fetch('/status')).json();
-    const m = st.skills_engine || {};
+    const m = st.skills_engine || {}, v = st.video_lane || {};
     const pill = $('#brain');
     if(m.can_run){ pill.className='brainpill live'; pill.textContent='brain: LIVE ('+m.brain_model+')'; }
     else { pill.className='brainpill dry'; pill.textContent='brain: DRY-RUN (set CATALYST_LLM_KEY)'; }
+    const vp = $('#vpill');
+    if(v.up){ vp.className='brainpill live'; vp.textContent='video: LIVE'; }
+    else { vp.className='brainpill dry'; vp.textContent='video: DRY-RUN (start ComfyUI)'; }
   }catch(e){ $('#brain').textContent='brain: ?'; }
+
+  // video workflows
+  try{
+    const vd = await (await fetch('/api/video/workflows')).json();
+    const vbox = $('#videos'); vbox.innerHTML='<h3>Video workflows</h3>';
+    (vd.workflows||[]).forEach(w=>{
+      const d=document.createElement('div'); d.className='item stack'; d.dataset.k='video:'+w.name+' '+w.format;
+      const flag = w.runnable ? '' : ' <span class="cat">ui-graph</span>';
+      d.innerHTML=`<span>🎬 ${w.name}</span>${flag}`; d.onclick=()=>selVideo(w); vbox.appendChild(d);
+    });
+  }catch(e){}
 
   const data = await (await fetch('/api/skills')).json();
   // stacks
@@ -84,31 +102,50 @@ async function boot(){
   };
 }
 
-function panel(title, sub){
+function panel(title, sub, withInput=true){
   $('#main').innerHTML =
    `<div class="title">${title}</div><div class="sub">${sub}</div>
-    <textarea id="inp" placeholder="Paste your input — a voice-note transcript, a brief, a topic…"></textarea>
+    ${withInput ? `<textarea id="inp" placeholder="Paste your input — a voice-note transcript, a brief, a topic…"></textarea>` : ''}
     <button class="runbtn" id="run">▶ RUN</button>
     <div id="result"></div>`;
   $('#run').onclick=go;
 }
 function selSkill(id){ SEL={type:'skill',id}; panel(id, 'Runs this one skill on your input.'); }
 function selStack(name){ SEL={type:'stack',id:name}; panel('⛓ '+name, 'Runs the stack as a chain — each skill’s output feeds the next.'); }
+function selVideo(w){
+  SEL={type:'video',id:w.name};
+  const note = w.runnable ? 'Queues this workflow on the video lane (local-first, cloud fallback).'
+                          : 'UI-graph export — re-save as API format in ComfyUI before it can queue. Run to see the dry-run.';
+  panel('🎬 '+w.name, note, false);
+}
 
 async function go(){
-  const inp=$('#inp').value.trim(); if(!inp) return;
   const btn=$('#run'); btn.disabled=true; btn.textContent='RUNNING…';
-  const url = SEL.type==='skill' ? `/api/skills/${SEL.id}/run` : `/api/skills/stack/${SEL.id}/run`;
+  let url, body;
+  if(SEL.type==='video'){ url='/api/video/run'; body={workflow_name:SEL.id}; }
+  else {
+    const inp=($('#inp')?.value||'').trim();
+    if(!inp){ btn.disabled=false; btn.textContent='▶ RUN'; return; }
+    url = SEL.type==='skill' ? `/api/skills/${SEL.id}/run` : `/api/skills/stack/${SEL.id}/run`;
+    body={input:inp};
+  }
   try{
-    const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:inp})});
-    const j = await r.json();
-    render(j);
+    const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    render(await r.json(), r.status);
   }catch(e){ $('#result').innerHTML=`<div class="out">error: ${e}</div>`; }
   btn.disabled=false; btn.textContent='▶ RUN';
 }
 
-function render(j){
+function render(j, status){
   const res=$('#result');
+  // video response
+  if(SEL.type==='video'){
+    if(status && status>=400){ res.innerHTML=`<div class="out dry">${esc(j.detail||'error')}</div>`; return; }
+    if(j.queued){ res.innerHTML=`<div class="out">✅ QUEUED on ${esc(j.lane)}\nengine: ${esc(j.base)}\nresponse: ${esc(JSON.stringify(j.engine_response))}</div>`; }
+    else { res.innerHTML=`<div class="out dry">DRY-RUN — no video engine reachable.\n\nworkflow: ${esc(j.workflow)}  (format: ${esc(j.format)})\nwould POST to: ${esc(j.would_send?.endpoint||'')}\nnodes: ${j.would_send?.nodes||0}\n${j.hint?('\n'+esc(j.hint)):''}</div>
+      <div class="hint">Start ComfyUI at <b>COMFYUI_API_BASE</b> (needs a GPU) and this queues for real.</div>`; }
+    return;
+  }
   // stack (chain) response
   if(j.steps){
     res.innerHTML = j.steps.map(s=>{
