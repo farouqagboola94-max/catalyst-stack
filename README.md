@@ -44,6 +44,7 @@ uvicorn app.main:app --reload --port 7001
 | `GET /` and `GET /services` | Catalyst Concepts services portfolio (HTML) |
 | `GET /ceo` | CEO business-card slide |
 | `GET /skills` · `/skills/cheatsheet` · `/skills/hub` | Visual skills registry, cheatsheet, integration hub |
+| **`GET /runner`** ⚡ | **Skill Runner console** — click-to-run every skill + stack through the brain |
 | `GET /ai-hub` | 60-tool AI integration hub |
 | `GET /skills.json` | Every skill on the rack, grouped by category |
 | **`GET /api/skills`** ⚡ | **Skills Engine (lit):** list all skills + stacks |

@@ -206,6 +206,7 @@ WEB_PAGES: Dict[str, str] = {
     "skills/cheatsheet": "skills-cheatsheet.html",
     "skills/hub": "skills-hub.html",
     "ai-hub": "ai-hub.html",
+    "runner": "runner.html",
 }
 
 
@@ -251,6 +252,12 @@ def skills_hub_page() -> HTMLResponse:
 def ai_hub_page() -> HTMLResponse:
     """Serve the 60-tool AI integration hub."""
     return _serve_page("ai-hub.html")
+
+
+@app.get("/runner", response_class=HTMLResponse, tags=["web"])
+def runner_page() -> HTMLResponse:
+    """Serve the Skill Runner console — drives every skill/stack via the brain."""
+    return _serve_page("runner.html")
 
 
 @app.get("/skills.json", tags=["skills"])
