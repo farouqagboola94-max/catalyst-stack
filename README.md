@@ -32,6 +32,13 @@ INTEGRATION_MANIFEST.md       # where every uploaded artifact landed
 requirements.txt
 ```
 
+## 📖 Playbook
+
+New to the terminal or handing it to the team? [`PLAYBOOK.md`](./PLAYBOOK.md)
+turns it into five step-by-step plays (content, SMM, Sneakers Fest, AI
+consulting, legal) — including how to run everything zero-cost through the local
+model-router.
+
 ## 🚀 Run the terminal
 
 ```bash
