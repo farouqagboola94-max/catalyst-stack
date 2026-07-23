@@ -51,6 +51,23 @@ uvicorn app.main:app --reload --port 7001
 | **`GET /api/skills/search?q=`** ⚡ | Full-text search across all skills |
 | **`GET /api/skills/category/{cat}`** ⚡ | Skills in a category |
 | **`GET /api/skills/stack/{name}`** ⚡ | Resolve a pre-built smart stack |
+| **`POST /api/skills/{id}/run`** ⚡ | **Run a skill** on your input (body: `{"input": "..."}`) |
+| **`POST /api/skills/stack/{name}/run`** ⚡ | Run a whole stack as a chain (each output feeds the next) |
+
+### Making runs go live
+
+`POST .../run` uses the skill's markdown body as the system prompt and calls an
+OpenAI-compatible **brain**. With no key set it returns a safe **dry-run**
+(shows exactly what it would send); add a free key and the same call runs for
+real. Configure in `.env` (see `.env.example`):
+
+```
+CATALYST_LLM_BASE=https://openrouter.ai/api/v1   # or NVIDIA NIM / DeepSeek / the local model-router
+CATALYST_LLM_KEY=sk-or-v1-...                     # blank = dry-run mode
+CATALYST_LLM_MODEL=deepseek/deepseek-chat
+```
+
+`GET /status` reports whether the brain is wired (`skills_engine.mode`).
 | `GET /status` | Whole-terminal health: arsenal + skills + video lane |
 | `GET /arsenal` | List every registered arsenal module |
 | `GET /arsenal/comfyui` | Full ComfyUI module record |

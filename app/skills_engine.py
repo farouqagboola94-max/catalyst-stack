@@ -23,17 +23,78 @@ at ``/skills`` and ``/skills/cheatsheet``.
 
 from __future__ import annotations
 
+import os
 import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import httpx
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = REPO_ROOT / "skills"
 
 router = APIRouter(prefix="/api/skills", tags=["skills-engine"])
+
+# --------------------------------------------------------------------------
+# The brain. An OpenAI-compatible chat endpoint — point it at the model-router,
+# or straight at a free provider (OpenRouter / NVIDIA NIM / DeepSeek, all
+# OpenAI-compatible). Configure via env; see .env.example.
+#   CATALYST_LLM_BASE   default http://127.0.0.1:3456/v1  (the local router)
+#   CATALYST_LLM_KEY    required to actually execute (blank = dry-run mode)
+#   CATALYST_LLM_MODEL  default deepseek/deepseek-chat
+# --------------------------------------------------------------------------
+LLM_BASE = os.environ.get("CATALYST_LLM_BASE", "http://127.0.0.1:3456/v1")
+LLM_KEY = os.environ.get("CATALYST_LLM_KEY", "")
+LLM_MODEL = os.environ.get("CATALYST_LLM_MODEL", "deepseek/deepseek-chat")
+
+
+class RunRequest(BaseModel):
+    input: str
+    model: Optional[str] = None
+    max_tokens: int = 1200
+
+
+def _call_llm(system: str, user: str, model: Optional[str], max_tokens: int) -> Dict[str, Any]:
+    """Call the configured OpenAI-compatible brain.
+
+    With no CATALYST_LLM_KEY set, returns a dry-run: exactly what WOULD be sent
+    and where. The wiring is proven; add a key and the same call goes live.
+    """
+    target = LLM_BASE.rstrip("/") + "/chat/completions"
+    chosen = model or LLM_MODEL
+    if not LLM_KEY:
+        return {
+            "executed": False,
+            "reason": "No CATALYST_LLM_KEY set — dry run. Set it (see .env.example) to run for real.",
+            "would_send": {
+                "endpoint": target,
+                "model": chosen,
+                "system_prompt_chars": len(system),
+                "system_prompt_preview": system[:200],
+                "user_input": user,
+            },
+        }
+    payload = {
+        "model": chosen,
+        "max_tokens": max_tokens,
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+    }
+    headers = {"Authorization": f"Bearer {LLM_KEY}", "Content-Type": "application/json"}
+    try:
+        with httpx.Client(timeout=60.0) as client:
+            resp = client.post(target, json=payload, headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        text = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+        return {"executed": True, "model": chosen, "endpoint": target, "output": text}
+    except Exception as exc:  # brain offline / bad key / provider error
+        raise HTTPException(status_code=502, detail=f"Brain call failed ({target}): {exc}")
 
 # Pre-built skill combinations, lifted from the Skills Cheatsheet. Each stack is
 # an ordered list of skill ids you run together for a common Catalyst job.
@@ -159,6 +220,43 @@ def get_stack(name: str) -> Dict[str, Any]:
     for sid in SMART_STACKS[name]:
         (resolved.append(_public(idx[sid])) if sid in idx else missing.append(sid))
     return {"stack": name, "skills": resolved, "missing": missing}
+
+
+@router.post("/stack/{name}/run")
+def run_stack(name: str, req: RunRequest) -> Dict[str, Any]:
+    """Run a smart stack as a chain: each skill's output feeds the next.
+
+    e.g. POST /api/skills/stack/substack-essay/run with a voice-note transcript
+    flows transcript -> beautiful-prose -> voice-builder -> deep-research ->
+    humanizer, returning every step.
+    """
+    if name not in SMART_STACKS:
+        raise HTTPException(status_code=404, detail=f"Unknown stack '{name}'. See /api/skills/stacks")
+    idx = _index()
+    steps: List[Dict[str, Any]] = []
+    current = req.input
+    for sid in SMART_STACKS[name]:
+        rec = idx.get(sid)
+        if rec is None:
+            steps.append({"skill": sid, "skipped": "not on rack"})
+            continue
+        result = _call_llm(rec["_text"], current, req.model, req.max_tokens)
+        steps.append({"skill": sid, "result": result})
+        if result.get("executed"):
+            current = result.get("output", current)  # feed forward
+    return {"stack": name, "input": req.input, "steps": steps, "final_output": current}
+
+
+@router.post("/{skill_id}/run")
+def run_skill(skill_id: str, req: RunRequest) -> Dict[str, Any]:
+    """Run one skill on your input. The skill's markdown body is the system
+    prompt; your input is the user turn. Returns the model's output (or a
+    dry-run preview when no brain key is configured)."""
+    rec = _index().get(skill_id)
+    if rec is None:
+        raise HTTPException(status_code=404, detail=f"Unknown skill '{skill_id}'")
+    result = _call_llm(rec["_text"], req.input, req.model, req.max_tokens)
+    return {"skill": skill_id, "title": rec["title"], "input": req.input, **result}
 
 
 @router.get("/{skill_id}")

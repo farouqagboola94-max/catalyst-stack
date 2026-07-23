@@ -35,6 +35,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 
 from arsenal.register_comfyui import router as comfyui_router
 from app.skills_engine import router as skills_router
+from app import skills_engine
 
 # --------------------------------------------------------------------------
 # Paths
@@ -284,6 +285,12 @@ async def status() -> JSONResponse:
             },
             "portfolio_available": PORTFOLIO_HTML.exists(),
             "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name != "README.md" and not p.name.endswith("CLAUDE.md")]),
+            "skills_engine": {
+                "can_run": bool(skills_engine.LLM_KEY),
+                "brain_base": skills_engine.LLM_BASE,
+                "brain_model": skills_engine.LLM_MODEL,
+                "mode": "live" if skills_engine.LLM_KEY else "dry-run (set CATALYST_LLM_KEY)",
+            },
             "web_pages": sorted(WEB_PAGES.keys()),
         }
     )
