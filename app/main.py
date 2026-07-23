@@ -35,7 +35,8 @@ from fastapi.responses import HTMLResponse, JSONResponse
 
 from arsenal.register_comfyui import router as comfyui_router
 from app.skills_engine import router as skills_router
-from app import skills_engine
+from app.video_engine import router as video_router
+from app import skills_engine, video_engine
 
 # --------------------------------------------------------------------------
 # Paths
@@ -63,6 +64,8 @@ app = FastAPI(
 app.include_router(comfyui_router)
 # The Skills Engine (lit): /api/skills, /search, /category, /stack, /{id}.
 app.include_router(skills_router)
+# The Video Engine (lit): /api/video/workflows, /health, /run.
+app.include_router(video_router)
 
 
 # --------------------------------------------------------------------------
@@ -289,6 +292,8 @@ async def status() -> JSONResponse:
                 "up": local.get("up", False),
                 "detail": local,
                 "cloud_fallback_configured": bool(CLOUD_GPU_BASE),
+                "mode": "live" if local.get("up") else "dry-run (start ComfyUI or set COMFYUI_CLOUD_BASE)",
+                "workflows": len(video_engine._catalog()),
             },
             "portfolio_available": PORTFOLIO_HTML.exists(),
             "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name != "README.md" and not p.name.endswith("CLAUDE.md")]),

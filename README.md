@@ -80,7 +80,9 @@ CATALYST_LLM_MODEL=deepseek/deepseek-chat
 | `GET /arsenal` | List every registered arsenal module |
 | `GET /arsenal/comfyui` | Full ComfyUI module record |
 | `GET /arsenal/comfyui/health` | Ping the local engine — clean `up: true/false` |
-| `POST /arsenal/comfyui/generate` | Queue a workflow on the local engine |
+| **`GET /api/video/workflows`** ⚡ | **Video Engine (lit):** parked workflows + format detection |
+| **`POST /api/video/run`** ⚡ | Run a workflow by name or JSON (dry-run → live like skills) |
+| `POST /arsenal/comfyui/generate` | Queue a raw workflow on the local engine |
 | `POST /switchboard/video` | Route a video job local-first, cloud fallback |
 | `GET /docs` | Interactive API docs |
 

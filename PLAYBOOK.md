@@ -86,9 +86,13 @@ more retainers without more hours.
    vendor call, countdown…).
 2. Sponsor + vendor docs: `commands/sneakers-fest/vendor-comms.md`,
    `sneakers-fest-promo.md`.
-3. Hype reels at **zero cost**: the ComfyUI **video lane**
-   (`POST /switchboard/video`, or `/arsenal/comfyui/generate`) — needs a GPU;
-   see `docs/comfyui_integration_runbook.md`.
+3. Hype reels at **zero cost**: the **Video Engine** —
+   `GET /api/video/workflows` to see parked graphs, then
+   `POST /api/video/run {"workflow_name":"seedance2_0_r2v"}`. Dry-run with no
+   engine (shows what it would queue); live the moment ComfyUI is up at
+   `COMFYUI_API_BASE` (needs a GPU — see `docs/comfyui_integration_runbook.md`).
+   Note: re-save the parked Seedance graph via ComfyUI's "Save (API format)"
+   before it can queue (the engine flags this for you).
 
 **You get:** sponsor decks, vendor outreach, and clip beds from one system,
 feeding the Dec 12 build-up.
