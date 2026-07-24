@@ -13,6 +13,10 @@ Lagos Noir identity, built to the house style ("Forge Systematics" — see
 | Substack cover | `catalyst-substack-cover.png` | 1200×600 | "The Great Sabotage" publication header |
 | Logo lockup sheet | `catalyst-logo-lockup.png` | 1600×1000 | Mark + wordmark + palette + type spec |
 | IG carousel (3 slides) | `catalyst-ig-carousel-{1-cover,2-body,3-cta}.png` | 1080×1350 | Reusable thread template |
+| Sneakers Fest story | `catalyst-sneakersfest-story.png` | 1080×1920 | IG/FB story |
+| Sneakers Fest ticket | `catalyst-sneakersfest-ticket.png` | 1400×520 | General-admission ticket |
+| Sponsor deck cover | `catalyst-sneakersfest-sponsor-cover.png` | 1600×900 | Partnership prospectus cover |
+| Sneakers Fest carousel (filled) | `catalyst-sf-carousel-{1,2,3}.png` | 1080×1350 | Announcement carousel |
 
 ## Palette
 | Token | Hex | Role |
@@ -37,3 +41,7 @@ Lagos Noir identity, built to the house style ("Forge Systematics" — see
 > Note: the renderer used here drops content in the bottom ~15% of a canvas, so
 > layouts keep everything in the top ~82% by design — the lower margin is
 > intentional.
+
+
+## Sneakers Fest 2026
+Venue: **Muri Okun Place Park, Victoria Island (VI), Lagos** · Dec 12, 2026.
