@@ -9,6 +9,10 @@ Lagos Noir identity, built to the house style ("Forge Systematics" — see
 | Brand cover | `catalyst-brand-cover.png` | 1600×900 | Deck cover, site hero, LinkedIn banner |
 | Social header | `catalyst-social-header.png` | 1500×500 | X / Twitter header (3:1) |
 | Business card | `catalyst-business-card.png` | 1050×600 | 3.5×2 in @ 300 DPI, print-ready |
+| Sneakers Fest poster | `catalyst-sneakersfest-poster.png` | 1080×1350 | IG portrait + printable event poster |
+| Substack cover | `catalyst-substack-cover.png` | 1200×600 | "The Great Sabotage" publication header |
+| Logo lockup sheet | `catalyst-logo-lockup.png` | 1600×1000 | Mark + wordmark + palette + type spec |
+| IG carousel (3 slides) | `catalyst-ig-carousel-{1-cover,2-body,3-cta}.png` | 1080×1350 | Reusable thread template |
 
 ## Palette
 | Token | Hex | Role |
