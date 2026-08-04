@@ -1,0 +1,17 @@
+{
+  "render_id": "A220B979",
+  "prompt": "Festival crowd, music, dancing, Lagos skyline neon",
+  "style": "music_video",
+  "resolution": "1920x1080",
+  "aspect_ratio": "16:9",
+  "duration_sec": 30,
+  "fps": 24,
+  "total_frames": 720,
+  "estimated_gpu_seconds": 576.0,
+  "motion_type": "dynamic_cut",
+  "lighting": "neon_rim",
+  "grain": 0.1,
+  "output_path": "/home/claude/CatalystOS/modules/open_higgsfield/renders/render_A220B979.mp4",
+  "status": "QUEUED",
+  "timestamp": "2026-04-30T03:10:33.951848"
+}

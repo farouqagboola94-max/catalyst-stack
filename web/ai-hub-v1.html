@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CATALYST OS — AI Integration Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060608;
+    --surface: #0e0e14;
+    --card: #12121a;
+    --border: #1c1c28;
+    --border-hot: #ff6b2b;
+    --orange: #ff6b2b;
+    --amber: #ffaa40;
+    --gold: #e8c84a;
+    --text: #f2f2f8;
+    --muted: #6a6a88;
+    --dim: #3a3a55;
+    --green: #40e0a0;
+    --blue: #4090ff;
+    --purple: #9060ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:'';
+    position:fixed; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, var(--orange), var(--amber), var(--orange), transparent);
+    z-index:100;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 40px 24px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: 'CATALYST OS';
+    position:absolute; right:-10px; top:-10px;
+    font-family:'Bebas Neue'; font-size:180px; color:#ffffff04;
+    line-height:1; pointer-events:none; white-space:nowrap;
+  }
+  .header-top { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .logo-tag {
+    background: var(--orange);
+    color:#000; font-family:'Bebas Neue'; font-size:11px;
+    padding:3px 10px; letter-spacing:2px;
+  }
+  .version-tag {
+    border:1px solid var(--dim); color:var(--muted);
+    font-family:'JetBrains Mono'; font-size:10px;
+    padding:3px 8px; letter-spacing:1px;
+  }
+  h1 {
+    font-family:'Bebas Neue'; font-size:clamp(42px,8vw,72px);
+    line-height:0.9; letter-spacing:2px; margin-bottom:12px;
+    background: linear-gradient(135deg, #fff 0%, var(--amber) 60%, var(--orange) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .header-sub {
+    font-size:14px; color:var(--muted); max-width:600px;
+    font-family:'JetBrains Mono'; line-height:1.6;
+  }
+  .header-sub span { color:var(--orange); }
+  .stats-row {
+    display:flex; gap:24px; margin-top:20px; flex-wrap:wrap;
+  }
+  .stat { display:flex; flex-direction:column; }
+  .stat-num { font-family:'Bebas Neue'; font-size:28px; color:var(--orange); line-height:1; }
+  .stat-label { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+
+  /* CONTROLS */
+  .controls {
+    padding:20px 24px;
+    border-bottom:1px solid var(--border);
+    display:flex; flex-direction:column; gap:16px;
+    position:sticky; top:0; z-index:50;
+    background:rgba(6,6,8,0.95); backdrop-filter:blur(12px);
+  }
+  .search-box {
+    position:relative;
+  }
+  .search-box input {
+    width:100%; background:var(--surface);
+    border:1px solid var(--border); border-radius:0;
+    color:var(--text); font-family:'JetBrains Mono'; font-size:13px;
+    padding:12px 16px 12px 40px; outline:none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus { border-color:var(--orange); }
+  .search-box::before {
+    content:'⌕'; position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    color:var(--muted); font-size:18px; z-index:1;
+  }
+  .filter-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .filter-btn {
+    padding:6px 14px; border:1px solid var(--border);
+    background:transparent; color:var(--muted);
+    font-family:'Syne'; font-size:12px; font-weight:600;
+    cursor:pointer; transition:all 0.15s; letter-spacing:0.5px;
+    text-transform:uppercase;
+  }
+  .filter-btn:hover { border-color:var(--dim); color:var(--text); }
+  .filter-btn.active { background:var(--orange); border-color:var(--orange); color:#000; }
+  .priority-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .p-btn {
+    padding:4px 12px; border:1px solid transparent;
+    font-family:'JetBrains Mono'; font-size:10px; cursor:pointer;
+    transition:all 0.15s; letter-spacing:1px; text-transform:uppercase;
+  }
+  .p-btn.all { border-color:var(--dim); color:var(--muted); background:transparent; }
+  .p-btn.all.active { border-color:var(--text); color:var(--text); }
+  .p-btn.core { border-color:#ff6b2b40; color:var(--orange); }
+  .p-btn.core.active { background:var(--orange); color:#000; }
+  .p-btn.high { border-color:#ffaa4040; color:var(--amber); }
+  .p-btn.high.active { background:var(--amber); color:#000; }
+  .p-btn.future { border-color:#4090ff40; color:var(--blue); }
+  .p-btn.future.active { background:var(--blue); color:#000; }
+  .results-count { font-family:'JetBrains Mono'; font-size:11px; color:var(--muted); margin-left:auto; align-self:center; }
+
+  /* CATALYST STACK SECTION */
+  .stack-section {
+    padding:24px; border-bottom:1px solid var(--border);
+  }
+  .section-label {
+    font-family:'Bebas Neue'; font-size:13px; letter-spacing:3px;
+    color:var(--orange); margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  .stack-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:8px; }
+  .stack-card {
+    background:var(--surface); border:1px solid var(--border);
+    padding:12px 14px;
+  }
+  .stack-role { font-size:10px; color:var(--orange); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; font-family:'JetBrains Mono'; }
+  .stack-tools { font-size:12px; color:var(--muted); line-height:1.6; }
+  .stack-tools strong { color:var(--text); }
+
+  /* TOOL GRID */
+  .grid-section { padding:24px; }
+  .tools-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:12px; }
+
+  /* TOOL CARD */
+  .tool-card {
+    background:var(--card); border:1px solid var(--border);
+    padding:16px; position:relative; cursor:pointer;
+    transition:all 0.2s; overflow:hidden;
+  }
+  .tool-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    opacity:0; transition:opacity 0.2s;
+  }
+  .tool-card.priority-core::before { background:var(--orange); opacity:1; }
+  .tool-card.priority-high::before { background:var(--amber); opacity:1; }
+  .tool-card.priority-future::before { background:var(--blue); opacity:0.6; }
+  .tool-card:hover { border-color:var(--dim); transform:translateY(-1px); }
+  .tool-card.hidden { display:none; }
+
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+  .card-num { font-family:'Bebas Neue'; font-size:24px; color:var(--dim); line-height:1; }
+  .card-badges { display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+  .cat-badge {
+    font-family:'JetBrains Mono'; font-size:9px; padding:2px 7px;
+    letter-spacing:1px; text-transform:uppercase; border:1px solid;
+  }
+  .cat-coding { border-color:#9060ff44; color:var(--purple); }
+  .cat-agents { border-color:#ff6b2b44; color:var(--orange); }
+  .cat-mcp { border-color:#40e0a044; color:var(--green); }
+  .cat-skills { border-color:#e8c84a44; color:var(--gold); }
+  .cat-local { border-color:#6a6a8844; color:var(--muted); }
+  .cat-automation { border-color:#4090ff44; color:var(--blue); }
+  .cat-data { border-color:#ff6b2b44; color:var(--amber); }
+  .cat-infra { border-color:#40e0a044; color:#40b0c0; }
+  .cat-learning { border-color:#e8c84a44; color:var(--gold); }
+  .priority-dot {
+    width:8px; height:8px; border-radius:50%;
+    flex-shrink:0;
+  }
+  .priority-dot.core { background:var(--orange); box-shadow:0 0 6px var(--orange); }
+  .priority-dot.high { background:var(--amber); box-shadow:0 0 6px var(--amber); }
+  .priority-dot.future { background:var(--blue); }
+
+  .tool-name { font-family:'Syne'; font-size:16px; font-weight:800; color:var(--text); margin-bottom:4px; }
+  .tool-tagline { font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.4; }
+  .divider { height:1px; background:var(--border); margin-bottom:12px; }
+  .catalyst-label { font-size:9px; font-family:'JetBrains Mono'; color:var(--orange); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+  .catalyst-use { font-size:12px; color:#c8c8e0; line-height:1.6; }
+  .card-footer { margin-top:12px; display:flex; justify-content:space-between; align-items:center; }
+  .priority-label {
+    font-family:'JetBrains Mono'; font-size:9px; letter-spacing:1px; text-transform:uppercase;
+  }
+  .priority-label.core { color:var(--orange); }
+  .priority-label.high { color:var(--amber); }
+  .priority-label.future { color:var(--blue); }
+  .action-hint { font-size:9px; color:var(--dim); font-family:'JetBrains Mono'; }
+
+  /* EXPAND MODAL */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.85);
+    z-index:200; display:none; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--card); border:1px solid var(--border-hot);
+    max-width:560px; width:100%; max-height:85vh; overflow-y:auto;
+    position:relative;
+  }
+  .modal-header {
+    padding:20px; border-bottom:1px solid var(--border);
+    position:sticky; top:0; background:var(--card); z-index:1;
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .modal-close {
+    background:none; border:none; color:var(--muted); cursor:pointer;
+    font-size:20px; line-height:1; padding:0;
+  }
+  .modal-close:hover { color:var(--text); }
+  .modal-body { padding:20px; }
+  .modal-section { margin-bottom:20px; }
+  .modal-section-title { font-size:10px; color:var(--orange); letter-spacing:2px; text-transform:uppercase; font-family:'JetBrains Mono'; margin-bottom:8px; }
+  .modal-text { font-size:13px; color:#c8c8e0; line-height:1.7; }
+  .workflow-step {
+    display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border);
+    font-size:12px;
+  }
+  .workflow-step:last-child { border-bottom:none; }
+  .step-num { color:var(--orange); font-family:'JetBrains Mono'; font-weight:700; flex-shrink:0; }
+  .step-text { color:#c8c8e0; line-height:1.5; }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align:center; padding:60px 20px; color:var(--dim);
+    font-family:'JetBrains Mono'; font-size:14px; display:none;
+  }
+  .no-results.visible { display:block; }
+
+  /* FOOTER */
+  footer {
+    padding:40px 24px; border-top:1px solid var(--border);
+    text-align:center; font-family:'JetBrains Mono'; font-size:11px;
+    color:var(--dim);
+  }
+  footer span { color:var(--orange); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--dim); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <span class="logo-tag">⚡ CATALYST OS</span>
+    <span class="version-tag">v2026.Q2 // METAL DRAGON BUILD</span>
+  </div>
+  <h1>AI INTEGRATION<br>HUB</h1>
+  <p class="header-sub">
+    60 tools. All mapped to <span>your</span> operations. Substack. Sneakers Fest. AI Consulting. SMM. Legal Docs. Personal Brand OS.<br>
+    No fluff. No demos. <span>Build for real work.</span>
+  </p>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-num">60</span><span class="stat-label">Total Tools</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--orange)">18</span><span class="stat-label">Core Stack</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--amber)">24</span><span class="stat-label">High Value</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--blue)">18</span><span class="stat-label">Future Build</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--green)">9</span><span class="stat-label">Categories</span></div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search tools, workflows, use cases..." oninput="filterTools()">
+  </div>
+  <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+    <div class="filter-row" id="catFilters">
+      <button class="filter-btn active" onclick="setCat('all',this)">ALL</button>
+      <button class="filter-btn" onclick="setCat('coding',this)">CODING</button>
+      <button class="filter-btn" onclick="setCat('agents',this)">AGENTS</button>
+      <button class="filter-btn" onclick="setCat('mcp',this)">MCP</button>
+      <button class="filter-btn" onclick="setCat('skills',this)">SKILLS</button>
+      <button class="filter-btn" onclick="setCat('local',this)">LOCAL AI</button>
+      <button class="filter-btn" onclick="setCat('automation',this)">AUTOMATION</button>
+      <button class="filter-btn" onclick="setCat('data',this)">DATA/RAG</button>
+      <button class="filter-btn" onclick="setCat('infra',this)">INFRA</button>
+      <button class="filter-btn" onclick="setCat('learning',this)">LEARNING</button>
+    </div>
+    <span class="results-count" id="resultsCount">60 tools</span>
+  </div>
+  <div class="priority-row">
+    <button class="p-btn all active" id="pAll" onclick="setPri('all',this)">ALL PRIORITY</button>
+    <button class="p-btn core" id="pCore" onclick="setPri('core',this)">● CORE — USE NOW</button>
+    <button class="p-btn high" id="pHigh" onclick="setPri('high',this)">● HIGH — 30 DAYS</button>
+    <button class="p-btn future" id="pFuture" onclick="setPri('future',this)">● FUTURE — Q3/Q4</button>
+  </div>
+</div>
+
+<section class="stack-section">
+  <div class="section-label">CATALYST QUICK START STACKS</div>
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-role">Content Pipeline</div>
+      <div class="stack-tools"><strong>n8n</strong> + <strong>Claude Code</strong> + <strong>Deep Research</strong> + <strong>Instructor</strong><br>Voice → Substack → YouTube → Shorts → Doc</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-role">Sneakers Fest 2026</div>
+      <div class="stack-tools"><strong>Task Master AI</strong> + <strong>Supabase MCP</strong> + <strong>FastAPI</strong> + <strong>Temporal</strong><br>Event ops, registration, payments, automation</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-role">AI Consulting</div>
+      <div class="stack-tools"><strong>Dify</strong> + <strong>Portkey Gateway</strong> + <strong>CrewAI</strong> + <strong>lmnr</strong><br>Build client AI tools, demo and deliver results</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-role">SMM Clients</div>
+      <div class="stack-tools"><strong>Marketing Skills</strong> + <strong>Claude SEO</strong> + <strong>MCP Playwright</strong> + <strong>Firecrawl</strong><br>Content, scheduling, SEO audits, competitor intel</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-role">Legal Docs (Chambers)</div>
+      <div class="stack-tools"><strong>PDF Processing</strong> + <strong>ExtractThinker</strong> + <strong>Instructor</strong> + <strong>Claude Code</strong><br>Affidavits, particulars, formatted legal output</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-role">Personal Brand OS</div>
+      <div class="stack-tools"><strong>OpenClaw</strong> + <strong>Chroma</strong> + <strong>Frontend Design</strong> + <strong>Deep Research</strong><br>Archive, search, publish, grow Catalyst OS</div>
+    </div>
+  </div>
+</section>
+
+<div class="grid-section">
+  <div class="section-label" style="margin-bottom:20px;">ALL 60 TOOLS — CATALYST MAPPED</div>
+  <div class="tools-grid" id="toolsGrid"></div>
+  <div class="no-results" id="noResults">No tools match your filters. Try a different search.</div>
+</div>
+
+<footer>
+  Built for <span>Oluwatobiloba The Catalyst</span> // Lagos, Nigeria // Metal Dragon // INFJ<br>
+  2026 is the launch. The fire made the metal stronger. <span>Now build.</span>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modalNum" style="font-family:'Bebas Neue';font-size:14px;color:var(--dim);"></div>
+        <div id="modalName" style="font-family:'Syne';font-size:22px;font-weight:800;"></div>
+        <div id="modalTagline" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const TOOLS = [
+  // ═══ CODING AGENTS & IDEs ═══
+  {
+    id:1, name:"Claude Code", cat:"coding",
+    tagline:"Terminal agent. 80.8% SWE-bench. Gold standard.",
+    catalystUse:"Your primary code builder. Use it to write the voice-to-content automation pipeline, generate Sneakers Fest ticketing scripts, build Python doc formatters for chambers, and develop Catalyst OS tools from the terminal.",
+    priority:"core",
+    workflow:["Install via npm install -g @anthropic-ai/claude-code","Use in any project folder — it reads your entire codebase","Give it a task: 'Build me an n8n webhook that receives audio and returns formatted Substack draft'","Iterate in the terminal without copying to chatboxes"]
+  },
+  {
+    id:2, name:"Cursor", cat:"coding",
+    tagline:"8 parallel agents. AI-first VS Code editor.",
+    catalystUse:"Write and iterate on all Catalyst OS automation scripts. Edit multiple files at once for SMM client dashboards. Use parallel agents to build Sneakers Fest landing page components simultaneously.",
+    priority:"core",
+    workflow:["Download Cursor IDE — replaces VS Code","Open any Catalyst OS project folder","Use Cmd+K to edit inline, Cmd+L to chat about the whole codebase","Run 8 agents in parallel for complex multi-file builds"]
+  },
+  {
+    id:3, name:"Codex CLI", cat:"coding",
+    tagline:"OpenAI terminal agent. Multi-step tasks.",
+    catalystUse:"Backup terminal agent when Claude Code hits rate limits. Use for multi-step document processing tasks — e.g. 'take this folder of voice transcripts, format each as a Substack article, output as .docx files'.",
+    priority:"high",
+    workflow:["npm install -g @openai/codex","Use for file batch processing tasks","Good for long multi-step sequences that need persistence"]
+  },
+  {
+    id:4, name:"Windsurf", cat:"coding",
+    tagline:"Cascade agent. Flow-state coding.",
+    catalystUse:"Use for deep-build sessions on Catalyst OS infrastructure — when you need to stay in flow state building complex systems without interruption. Cascade agent plans the full build before executing.",
+    priority:"high",
+    workflow:["Download Windsurf IDE","Activate Cascade for autonomous multi-step builds","Best for long sessions building client AI apps"]
+  },
+  {
+    id:5, name:"Devin", cat:"coding",
+    tagline:"Most autonomous AI engineer. End-to-end.",
+    catalystUse:"Deploy for complex autonomous builds — the Sneakers Fest full-stack web app (registration, payments, countdown, vendor portal). Give it the PRD and let it build while you focus on strategy.",
+    priority:"future",
+    workflow:["devin.ai — web-based","Write a detailed PRD for what you want built","Assign full engineering tasks: 'Build Sneakers Fest 2026 event website with Supabase backend'","Review and ship"]
+  },
+  {
+    id:6, name:"Aider", cat:"coding",
+    tagline:"AI pair programming. Any LLM. 30K+ stars.",
+    catalystUse:"Quick code fixes and iterations on existing Catalyst OS scripts. Open source — works with Claude, GPT, Gemini. Good for rapid edits when you don't want to open a full IDE.",
+    priority:"high",
+    workflow:["pip install aider-chat","aider --claude-sonnet or --gpt-4o","Pair code with any model on any file","Good for quick single-file improvements"]
+  },
+  {
+    id:7, name:"Superpowers", cat:"coding",
+    tagline:"94K+ stars. Install before anything else.",
+    catalystUse:"Browser extension that supercharges every AI interface you use. Adds prompt history, templates, custom instructions. Install on day one — it upgrades Claude.ai, ChatGPT, Gemini across all tabs.",
+    priority:"core",
+    workflow:["Install from Chrome Web Store","Set Catalyst OS system prompt as default","Build prompt library for: content drafts, legal formatting, SMM briefs","Use across all AI tools without re-entering context"]
+  },
+
+  // ═══ AGENT FRAMEWORKS ═══
+  {
+    id:8, name:"OpenClaw", cat:"agents",
+    tagline:"210K+ stars. Multi-channel personal agent.",
+    catalystUse:"Build your personal Catalyst OS agent that monitors Substack metrics, tracks Sneakers Fest registrations, manages your content calendar, and sends you daily briefings. This is the brain of your automated empire.",
+    priority:"core",
+    workflow:["Clone from GitHub: open-claw","Configure channels: email, Substack, social monitoring","Set up daily digest: Catalyst metrics, registrations, trending topics in sneaker/AI space","Connect to n8n for action execution"]
+  },
+  {
+    id:9, name:"LangGraph", cat:"agents",
+    tagline:"Multi-agent graphs. 26K+ stars.",
+    catalystUse:"Build the content pipeline as a graph: Node 1 receives transcript → Node 2 generates Substack draft → Node 3 generates YouTube script → Node 4 generates Shorts script → Node 5 formats Word doc. Visual, stateful, recoverable.",
+    priority:"high",
+    workflow:["pip install langgraph","Map your content pipeline as a graph","Each node = one transformation step","Add conditional logic: if transcript is under 500 words, skip YouTube long-form"]
+  },
+  {
+    id:10, name:"CrewAI", cat:"agents",
+    tagline:"Roles, goals, backstories. Team-like workflows.",
+    catalystUse:"Build your virtual AI team: Content Director (plans the piece), Researcher (pulls context), Substack Writer (drafts the article), SEO Editor (optimizes), Social Media Manager (writes platform posts). All running autonomously.",
+    priority:"core",
+    workflow:["pip install crewai","Define agents: Content Director, Researcher, Writer, SEO Editor","Define tasks and assign to agents","Set process: sequential or hierarchical","Run on your voice note → get full content package output"]
+  },
+  {
+    id:11, name:"AutoGPT", cat:"agents",
+    tagline:"The original agent. Matured and stable.",
+    catalystUse:"Automated background research — run AutoGPT to monitor Lagos sneaker market, track competitor Substack growth, compile weekly industry reports. Set it and check results daily.",
+    priority:"high",
+    workflow:["Clone AutoGPT from GitHub","Set goals: 'Monitor Lagos sneaker industry news daily and compile a brief'","Run on schedule via cron job","Review output in the AutoGPT web interface"]
+  },
+  {
+    id:12, name:"Dify", cat:"agents",
+    tagline:"No-code LLM app builder. RAG + agents.",
+    catalystUse:"Build and sell AI tools to consulting clients — no code required from them. Create 'Legal Doc Formatter' app for chambers, 'Social Media Calendar Generator' for SMM clients, 'Event Brief Builder' for corporate clients. Deliver as a web URL.",
+    priority:"core",
+    workflow:["dify.ai — sign up free","Create new app → choose Agent type","Connect your knowledge base (client docs, brand guide)","Add Claude as the model","Share the URL with the client — they use it directly"]
+  },
+  {
+    id:13, name:"OWL", cat:"agents",
+    tagline:"Tops GAIA benchmark. Agent coordination.",
+    catalystUse:"Complex multi-agent coordination tasks — when you need multiple agents working in parallel across different workflows (content + social + event management). GAIA benchmark means it handles real-world messy tasks.",
+    priority:"future",
+    workflow:["Clone OWL from GitHub","Define coordinator agent + worker agents","Assign: Agent A handles content pipeline, Agent B handles event tracking, Agent C handles client reporting","Coordinator manages conflicts and prioritization"]
+  },
+  {
+    id:14, name:"CopilotKit", cat:"agents",
+    tagline:"AI copilots inside React apps.",
+    catalystUse:"Embed an AI co-pilot into the Catalyst OS dashboard — so you can type natural language commands inside your own tools. 'Add 3 new vendors to Sneakers Fest list' or 'Draft this week's Substack intro' from within your custom dashboard.",
+    priority:"future",
+    workflow:["npm install @copilotkit/react-core","Wrap your React app in CopilotKit provider","Add the sidebar or popup component","Define actions your copilot can take within the app"]
+  },
+  {
+    id:15, name:"pydantic-ai", cat:"agents",
+    tagline:"Type-safe. Validated outputs.",
+    catalystUse:"When building client deliverables via AI, use pydantic-ai to ensure structured, validated outputs — so the AI never returns a malformed document, broken JSON, or incomplete proposal. Critical for professional client work.",
+    priority:"high",
+    workflow:["pip install pydantic-ai","Define output schema: SubstackArticle, ClientProposal, EventBrief","AI output is validated against schema before delivery","If invalid, auto-retries — never delivers broken output to client"]
+  },
+
+  // ═══ MCP SERVERS ═══
+  {
+    id:16, name:"Tavily", cat:"mcp",
+    tagline:"AI-native search. Clean LLM-ready data.",
+    catalystUse:"Research engine for Substack articles — when writing on Lagos entrepreneurship, sneaker culture, AI trends, Islamic philosophy. Returns clean, citation-ready data without scraping noise. Integrates directly with Claude.",
+    priority:"core",
+    workflow:["Get API key at tavily.com","Add as MCP server in Claude Code or Cursor","Use in content research: 'Find me 5 recent data points about Nigerian sneaker market growth'","Returns structured, LLM-ready results"]
+  },
+  {
+    id:17, name:"Context7", cat:"mcp",
+    tagline:"Live library docs. No hallucinated APIs.",
+    catalystUse:"When building Catalyst OS tools — Claude will reference the actual current docs for n8n, Supabase, FastAPI, etc. instead of outdated training data. Eliminates the #1 cause of broken code: hallucinated API calls.",
+    priority:"core",
+    workflow:["Add Context7 MCP server to Claude Code","Whenever you use a library, Claude automatically fetches live docs","Add 'use context7' to your prompts","Zero hallucinated method names or outdated parameters"]
+  },
+  {
+    id:18, name:"Task Master AI", cat:"mcp",
+    tagline:"AI project manager. PRD to tasks.",
+    catalystUse:"Write the Sneakers Fest 2026 PRD once — Task Master breaks it into 200+ granular dev tasks with dependencies, assigns to the right tools, tracks completion. Also manages Substack content calendar and consulting project timelines.",
+    priority:"core",
+    workflow:["Install Task Master AI MCP","Write your PRD: 'Sneakers Fest 2026 event platform with X Y Z requirements'","It generates a full task breakdown","Track progress across Claude Code sessions — it persists the state"]
+  },
+  {
+    id:19, name:"MCP Playwright", cat:"mcp",
+    tagline:"Browser automation via natural language.",
+    catalystUse:"Automate repetitive browser tasks: fill vendor registration forms for Sneakers Fest, post content across multiple social platforms, scrape competitor pricing, auto-schedule Instagram posts via browser.",
+    priority:"high",
+    workflow:["Add Playwright MCP to Claude Code","Tell it: 'Go to Instagram, log in, post this caption with this image to my account'","It controls the browser while you watch","Script repetitive form-filling for event management"]
+  },
+  {
+    id:20, name:"Figma MCP", cat:"mcp",
+    tagline:"Design files to production code.",
+    catalystUse:"Convert Catalyst OS brand designs directly to working React components — Sneakers Fest landing page, Substack cover graphics HTML version, social media post templates as web components. Design to code in one step.",
+    priority:"future",
+    workflow:["Add Figma MCP in Cursor or Claude Code","Share Figma file link","'Convert this Figma component to a React component matching the design exactly'","Produces pixel-perfect code from your designs"]
+  },
+  {
+    id:21, name:"Supabase MCP", cat:"mcp",
+    tagline:"Database ops through natural language.",
+    catalystUse:"Manage Sneakers Fest registrations, vendor data, ticket sales, and client CRM in plain English. 'Show me all vendors who registered in the last 48 hours' or 'Update ticket count for early bird tier' — no SQL needed.",
+    priority:"core",
+    workflow:["Set up Supabase project for Catalyst OS","Add Supabase MCP to Claude Code","Connect with your project URL and service key","Query your database in plain English from the terminal"]
+  },
+  {
+    id:22, name:"GitHub MCP", cat:"mcp",
+    tagline:"Issues, PRs, repos via AI agents.",
+    catalystUse:"Manage all Catalyst OS automation scripts and tool code via AI — create issues from voice notes ('this part of the pipeline is broken'), review PRs, manage repos for Sneakers Fest website, Substack automation, client tools.",
+    priority:"high",
+    workflow:["Connect GitHub MCP to Claude Code","'Create a GitHub issue: The Substack formatter breaks when voice note is under 2 minutes'","Agents can open PRs, review code, and merge approved changes","Full project management through natural language"]
+  },
+  {
+    id:23, name:"fastmcp", cat:"mcp",
+    tagline:"Build custom MCP servers in Python.",
+    catalystUse:"Build your own MCPs for Catalyst-specific workflows — a 'CatalystContent' MCP that has tools for your exact Substack format, a 'SneakersFest' MCP that knows all vendor/event data, a 'Chambers' MCP for legal doc templates.",
+    priority:"future",
+    workflow:["pip install fastmcp","Build custom tool in Python with @mcp.tool decorator","Deploy as MCP server","Connect to Claude Code — now Claude has access to YOUR proprietary tools"]
+  },
+
+  // ═══ CLAUDE SKILLS ═══
+  {
+    id:24, name:"PDF Processing", cat:"skills",
+    tagline:"Tables, forms, merge, split.",
+    catalystUse:"Core skill for chambers client work — extract data from uploaded legal documents, merge affidavits, split multi-party case files, fill in form templates. Also use for reading vendor agreements, sponsor contracts for Sneakers Fest.",
+    priority:"core",
+    workflow:["Already available in Claude.ai Pro","Upload any PDF and ask for extraction, merging, splitting","Use for: chambers affidavits, sponsor contracts, event permits","Combine with Instructor for structured output from legal docs"]
+  },
+  {
+    id:25, name:"Frontend Design", cat:"skills",
+    tagline:"277K+ installs. No AI slop look.",
+    catalystUse:"Build Catalyst OS branded interfaces — Sneakers Fest landing page, Substack custom elements, client-facing AI tool UIs. This skill forces Claude to produce visually distinctive, non-generic designs. Already active in your current setup.",
+    priority:"core",
+    workflow:["Already installed in your Claude environment","Ask for any UI component or page with this skill active","Specify: 'Dark industrial aesthetic, orange accents, Lagos energy'","Produces production-grade designs, not AI template output"]
+  },
+  {
+    id:26, name:"Skill Creator", cat:"skills",
+    tagline:"Describe workflow. Get skill in 5 min.",
+    catalystUse:"Build custom Claude skills for YOUR exact workflows — a 'CatalystContent' skill that knows your voice, your Substack format, your YouTube script structure. A 'ChambersDocs' skill that knows Nigerian legal document conventions.",
+    priority:"high",
+    workflow:["Access Skill Creator in Claude","Describe your workflow in detail: 'I need Claude to format voice transcripts into Substack articles with my specific style'","It generates a SKILL.md file","Install it — Claude now performs that workflow at expert level every time"]
+  },
+  {
+    id:27, name:"MCP Builder", cat:"skills",
+    tagline:"Build MCP servers. New 2026.",
+    catalystUse:"Use this skill to guide building of custom Catalyst OS MCP servers — the skill knows the patterns and best practices for building reliable, production MCPs. Pairs with fastmcp for implementation.",
+    priority:"future",
+    workflow:["Active in Claude — use alongside fastmcp","'Build me an MCP server that has tools for managing Sneakers Fest vendor list'","It designs the architecture and writes the code","Deploy and connect to your agents"]
+  },
+  {
+    id:28, name:"Claude API Skill", cat:"skills",
+    tagline:"8 language API quickstart.",
+    catalystUse:"When building client AI consulting products — this skill gives you production-ready Claude API integration code in Python, Node.js, and more. Use to build bespoke AI tools for chambers, SMM clients, and corporate consulting.",
+    priority:"core",
+    workflow:["Active in Claude","'Build me a Python script that takes a legal brief as input and returns formatted particulars of claim using Claude API'","Get production-ready integration code","Deploy as a client deliverable"]
+  },
+  {
+    id:29, name:"WebApp Testing", cat:"skills",
+    tagline:"Playwright tests via plain English.",
+    catalystUse:"Test Catalyst OS tools before handing to clients — 'Test that the vendor registration form submits correctly and stores data in Supabase'. Ensures professional quality delivery. Critical for consulting reputation.",
+    priority:"high",
+    workflow:["Active in Claude","Describe your app's expected behavior in plain English","Claude generates Playwright test suite","Run tests automatically before every client demo"]
+  },
+  {
+    id:30, name:"Marketing Skills", cat:"skills",
+    tagline:"CRO, copywriting, SEO, email.",
+    catalystUse:"Your primary skill for SMM client work — use for writing conversion copy, email sequences, social captions, landing page copy, ad creative. Apply to Aso Oke client (₦100K retainer) and all future SMM clients. Also use for Sneakers Fest marketing.",
+    priority:"core",
+    workflow:["Active in Claude","Brief it with client brand voice, target audience, goal","Output: social captions, email campaigns, ad copy, landing pages","Apply CRO principles to Sneakers Fest ticket sales page"]
+  },
+  {
+    id:31, name:"Claude SEO", cat:"skills",
+    tagline:"12 sub-skills. Full-site audit.",
+    catalystUse:"Upsell to SMM clients — a full SEO audit as an additional service on top of the ₦100K retainer. Audit their site, fix technical SEO, build content strategy. High-value deliverable, low additional effort with this skill.",
+    priority:"high",
+    workflow:["Active in Claude","Provide client's website URL","Run full audit: technical, on-page, content gaps, backlinks","Generate prioritized action plan","Deliver as professional SEO report (docx)"]
+  },
+  {
+    id:32, name:"Deep Research", cat:"skills",
+    tagline:"8-phase deep research. Auto-continuation.",
+    catalystUse:"Use for every major Substack piece — 8-phase research means your articles cite real data, not surface-level takes. Also critical for consulting pitches: 'Research the state of AI adoption in Nigerian professional practices' before walking into a chambers pitch.",
+    priority:"core",
+    workflow:["Active in Claude Pro (Research feature)","State your research topic with full context","It runs 8 phases autonomously, follows citations, synthesizes","Output is a comprehensive brief you then convert to content or pitch"]
+  },
+
+  // ═══ LOCAL AI ═══
+  {
+    id:33, name:"Ollama", cat:"local",
+    tagline:"Run LLMs locally. One command.",
+    catalystUse:"Run AI on your machine for confidential client data — chambers legal documents, client financial info, personal brand data. Zero API costs for high-volume tasks. Run Llama 3, Mistral, Qwen locally. Essential for sensitive consulting work.",
+    priority:"high",
+    workflow:["brew install ollama or curl install on Linux","ollama pull llama3.3","ollama run llama3.3","Use Open WebUI as the interface — see tool #34"]
+  },
+  {
+    id:34, name:"Open WebUI", cat:"local",
+    tagline:"Self-hosted ChatGPT interface.",
+    catalystUse:"Your private AI workspace — ChatGPT-quality interface running on your machine. Use for sensitive client work where you can't share data with external APIs. Configure with multiple local models via Ollama. Also build client-facing local AI tools.",
+    priority:"high",
+    workflow:["docker run -d -p 3000:80 ghcr.io/open-webui/open-webui","Connect to Ollama backend (localhost:11434)","Set up custom system prompts for Catalyst OS workflows","Access at localhost:3000 — fully private"]
+  },
+  {
+    id:35, name:"LlamaFile", cat:"local",
+    tagline:"LLM as single executable. Zero setup.",
+    catalystUse:"Single-file AI for on-the-go consulting — download one file, run anywhere, no setup. Use on client site visits, events, or when internet is unreliable in Lagos. Instant AI without connectivity dependency.",
+    priority:"future",
+    workflow:["Download from Mozilla's GitHub releases","chmod +x llamafile && ./llamafile","Opens a local web UI in your browser","Works offline, no installation, no setup"]
+  },
+  {
+    id:36, name:"Unsloth", cat:"local",
+    tagline:"Fine-tune 2x faster. 70% less memory.",
+    catalystUse:"Fine-tune a model on your 72K-word Catalyst Manifesto, The Great Sabotage, Dark Matter — creating a model that writes in YOUR voice. Then deploy it to generate first drafts that sound like Catalyst, not like generic AI output.",
+    priority:"future",
+    workflow:["pip install unsloth","Collect your training data: all Catalyst OS writing output","Fine-tune Llama 3 on your content — runs on consumer GPU or Google Colab","Deploy with Ollama or vLLM as your personal writing model"]
+  },
+  {
+    id:37, name:"vLLM", cat:"local",
+    tagline:"2-4x faster. Production deployment.",
+    catalystUse:"Once you fine-tune a Catalyst voice model (via Unsloth), deploy it with vLLM for production-speed inference. Build a private API endpoint that SMM clients or consulting clients access — your proprietary AI model as a service.",
+    priority:"future",
+    workflow:["pip install vllm","vllm serve your-catalyst-model","Creates OpenAI-compatible API endpoint","Connect Dify, n8n, or any tool to your own model server"]
+  },
+
+  // ═══ WORKFLOW & AUTOMATION ═══
+  {
+    id:38, name:"n8n", cat:"automation",
+    tagline:"400+ integrations. 4K+ templates. Self-host.",
+    catalystUse:"The backbone of Catalyst OS automation. Build: voice note → Whisper transcription → Claude formatting → Substack draft → email notify. Sneakers Fest: registration form → Supabase store → welcome email → Slack notify. Self-host = zero per-run costs.",
+    priority:"core",
+    workflow:["docker run -d n8nio/n8n (self-host) or n8n.io cloud","Build your first workflow: Webhook → Claude API → Gmail","Template #1: Voice note to content package","Template #2: Vendor registration to Supabase + email","Template #3: Daily Substack metrics to Telegram"]
+  },
+  {
+    id:39, name:"Langflow", cat:"automation",
+    tagline:"Visual drag-and-drop. 140K+ stars.",
+    catalystUse:"Visual alternative to n8n for AI-specific pipelines. Drag and drop: Load Document → Split Text → Embed → Store in Chroma → Retrieve → Claude → Output. Build your content RAG pipeline visually without coding.",
+    priority:"high",
+    workflow:["pip install langflow","langflow run — opens browser UI","Drag components: Claude, Chroma, File Loader, Text Splitter","Build your content archive pipeline visually","Export as Python when ready to productionize"]
+  },
+  {
+    id:40, name:"Huginn", cat:"automation",
+    tagline:"Self-hosted. Privacy-first web agents.",
+    catalystUse:"Monitor the web privately — track competitor Substack stats, monitor when 'Sneakers Fest' is mentioned online, watch for Lagos tech event announcements, track sneaker brand news. Alerts you automatically. No third-party data sharing.",
+    priority:"future",
+    workflow:["Clone Huginn from GitHub, Docker deploy","Create Agents: 'Monitor Google for Lagos sneaker events'","Set scenarios: if new result → send Telegram message","Runs 24/7 as your private intelligence network"]
+  },
+  {
+    id:41, name:"DSPy", cat:"automation",
+    tagline:"Program models, not just prompt them.",
+    catalystUse:"Optimize your content pipeline prompts automatically. Instead of manually tweaking prompts for better output, DSPy finds the optimal prompt through systematic testing. Use to maximize quality of Substack drafts, proposal generation, client reports.",
+    priority:"future",
+    workflow:["pip install dspy-ai","Define your task: input = voice transcript, output = quality Substack draft","Define your metric: what makes output good","DSPy optimizes the prompts automatically through examples"]
+  },
+  {
+    id:42, name:"Temporal", cat:"automation",
+    tagline:"Durable workflows. Survives crashes.",
+    catalystUse:"Production-grade workflows for Sneakers Fest — ticket purchase → payment confirmation → ticket generation → email delivery → database update. Each step is durable: if the server crashes at step 3, it resumes at step 3. No lost registrations.",
+    priority:"future",
+    workflow:["temporal.io — cloud or self-host","Define workflow activities in Python or Go","Workflow state persists through any failure","Critical for any payment or registration flow at Sneakers Fest"]
+  },
+
+  // ═══ SEARCH, DATA & RAG ═══
+  {
+    id:43, name:"GPT Researcher", cat:"data",
+    tagline:"Autonomous reports with sources.",
+    catalystUse:"Generate full research reports for consulting pitches — 'State of AI adoption in Nigerian SMEs 2026'. Run before every major client meeting. Also use to generate Substack research briefs: comprehensive, cited, in under 10 minutes.",
+    priority:"high",
+    workflow:["pip install gpt-researcher","from gpt_researcher import GPTResearcher","Set OPENAI_API_KEY or use with Claude via Portkey","researcher.research('Sneakers resale market in Lagos 2025-2026')","Get full report with sources and citations"]
+  },
+  {
+    id:44, name:"Firecrawl", cat:"data",
+    tagline:"Any website into LLM-ready data.",
+    catalystUse:"Scrape sneaker brand websites, competitor event pages, industry blogs into clean data for your AI. Research competitor Substack pricing and strategy. Crawl vendor websites before Sneakers Fest outreach. Feed clean data to your RAG system.",
+    priority:"high",
+    workflow:["firecrawl.dev — get API key","firecrawl.scrape_url(url) — single page","firecrawl.crawl_url(url) — entire site","Feed output to Chroma for semantic search","Use: competitor intel, sponsor research, content enrichment"]
+  },
+  {
+    id:45, name:"Vanna AI", cat:"data",
+    tagline:"Natural language to SQL queries.",
+    catalystUse:"Query your Sneakers Fest Supabase database in plain English — 'How many tickets sold this week vs last week', 'Show top 5 vendor categories by registration count', 'Which ticket tier has highest abandonment'. No SQL needed.",
+    priority:"future",
+    workflow:["pip install vanna","Connect to Supabase PostgreSQL database","Train Vanna on your schema","Ask questions in plain English, get SQL + results","Build a simple dashboard interface on top"]
+  },
+  {
+    id:46, name:"Instructor", cat:"data",
+    tagline:"Structured JSON from any LLM.",
+    catalystUse:"Make Claude output perfectly structured data every time — SubstackArticle with exact fields, EventBrief with required sections, LegalDoc with proper formatting, ClientProposal with correct structure. Eliminates manual reformatting.",
+    priority:"core",
+    workflow:["pip install instructor","import instructor","Define Pydantic model: class SubstackArticle(BaseModel)","client = instructor.from_anthropic(Anthropic())","article = client.messages.create(response_model=SubstackArticle, ...)","Always returns valid, structured output"]
+  },
+  {
+    id:47, name:"Chroma", cat:"data",
+    tagline:"Open-source vector database. Semantic search.",
+    catalystUse:"Store all your Catalyst OS content in a vector database — every Substack article, The Great Sabotage, Catalyst Manifesto, Dark Matter, voice transcripts. Then: 'Find everything I've written about betrayal and resilience' — semantic search across your entire archive.",
+    priority:"high",
+    workflow:["pip install chromadb","client = chromadb.Client()","collection = client.create_collection('catalyst_archive')","Add all your documents with embeddings","Query: results = collection.query(query_texts=['betrayal and rebuilding'])","Build your personal knowledge base"]
+  },
+  {
+    id:48, name:"dlt", cat:"data",
+    tagline:"Data pipelines from 5,000+ sources.",
+    catalystUse:"Build automated data pipelines — Substack analytics → Supabase, Sneakers Fest registrations → data warehouse, client social media metrics → dashboard. Set up once, data flows automatically. Use for client reporting infrastructure.",
+    priority:"future",
+    workflow:["pip install dlt","import dlt","Define source (Substack API, Supabase) and destination","dlt pipeline runs on schedule","Data always flows to the right place without manual exports"]
+  },
+  {
+    id:49, name:"ExtractThinker", cat:"data",
+    tagline:"Structured data from any document.",
+    catalystUse:"Extract structured data from uploaded client documents — pull all party names, dates, case numbers from legal briefs for chambers. Extract vendor details from registration PDFs for Sneakers Fest. Convert unstructured uploads into workable data.",
+    priority:"high",
+    workflow:["pip install extract-thinker","Load document: extractor.load_file(path)","Define extraction schema as Pydantic model","result = extractor.extract(contract, LegalBrief)","Returns clean structured data from any messy doc"]
+  },
+
+  // ═══ API & INFRASTRUCTURE ═══
+  {
+    id:50, name:"FastAPI", cat:"infra",
+    tagline:"Python web framework for AI apps.",
+    catalystUse:"Backend infrastructure for all Catalyst OS tools — Sneakers Fest API (ticket purchases, vendor registration), Claude API wrapper for client tools, content pipeline webhook receiver. Production-grade Python APIs, fast to build.",
+    priority:"core",
+    workflow:["pip install fastapi uvicorn","Build endpoints: POST /transcribe, POST /format-content, GET /event-stats","Deploy on Railway or Render (free tier available)","Connect to Supabase, Claude API, n8n webhooks","Serves as the backbone of all Catalyst OS tools"]
+  },
+  {
+    id:51, name:"Portkey Gateway", cat:"infra",
+    tagline:"Route to 250+ LLMs. One API.",
+    catalystUse:"Manage all AI provider costs intelligently — use Claude for creative content, GPT-4o for specific tasks, Gemini for free tier tasks. One API key to rule them all. Add fallbacks: if Claude rate limits, auto-route to GPT. Track spend across all projects.",
+    priority:"high",
+    workflow:["portkey.ai — sign up","Get Portkey API key","Replace direct Anthropic/OpenAI calls with Portkey","Configure routing rules: task type → best model","Monitor costs and latency across all your AI usage"]
+  },
+  {
+    id:52, name:"lmnr", cat:"infra",
+    tagline:"Trace and evaluate agent behavior.",
+    catalystUse:"Monitor your Catalyst OS AI agents — when the content pipeline agent runs, see every decision it made, where it slowed down, where it failed. Essential for debugging complex CrewAI or LangGraph pipelines in production.",
+    priority:"future",
+    workflow:["pip install lmnr","Wrap your agent runs with lmnr tracing","lmnr.start_as_current_span('content-pipeline')","View traces in the lmnr dashboard","Identify and fix bottlenecks in complex agent workflows"]
+  },
+  {
+    id:53, name:"Codebase Memory MCP", cat:"infra",
+    tagline:"Claude remembers your whole project.",
+    catalystUse:"Claude forgets your codebase between sessions — this MCP gives it permanent memory of all Catalyst OS code. Every time you open Claude Code on a project, it already knows the architecture, the conventions, the past decisions. No re-explaining.",
+    priority:"high",
+    workflow:["Install Codebase Memory MCP","Index your Catalyst OS repo on first run","Claude reads the memory index on every new session","'Remember we decided to use Supabase over Firebase' — it actually remembers","Works across Claude Code sessions permanently"]
+  },
+
+  // ═══ LEARNING RESOURCES ═══
+  {
+    id:54, name:"Awesome Claude Skills", cat:"learning",
+    tagline:"22K+ stars. Best curated list.",
+    catalystUse:"Your discovery resource for new Claude skills — check this monthly to find skills relevant to your evolving workflows. As Catalyst OS grows, new skill needs emerge. This is where you find them before building custom ones.",
+    priority:"high",
+    workflow:["github.com/awesome-claude-skills","Browse by category: writing, coding, research, business","Filter for marketing, legal, content creation categories","Install relevant skills directly from listings","Monthly review habit: what's new that Catalyst OS needs?"]
+  },
+  {
+    id:55, name:"Anthropic Skills Repo", cat:"learning",
+    tagline:"17 official skills. Gold standard.",
+    catalystUse:"The authoritative source — skills built and verified by Anthropic. Use the official PDF, DOCX, frontend design skills rather than community versions. When in doubt, official beats community. Your current skill set is sourced from here.",
+    priority:"core",
+    workflow:["github.com/anthropics/claude-skills","Download official SKILL.md files","Install in your Claude environment","Trust these over community alternatives for critical workflows","Follows Anthropic's own quality standards"]
+  },
+  {
+    id:56, name:"Awesome Agents", cat:"learning",
+    tagline:"100+ open-source agent tools.",
+    catalystUse:"Discover agent tools the mainstream hasn't found yet. When planning Q3 Catalyst OS expansion, use this to find cutting-edge agent capabilities. Early adoption of the right agent tool = competitive advantage in your consulting work.",
+    priority:"high",
+    workflow:["github.com/awesome-agents","Browse monthly for new entries","Star tools relevant to content, event, consulting workflows","Evaluate: GitHub stars + last commit date (per the pro tips)","Add the best ones to your Catalyst OS roadmap"]
+  },
+  {
+    id:57, name:"PromptingGuide", cat:"learning",
+    tagline:"Every prompting technique in one place.",
+    catalystUse:"Master advanced prompting to get better output from Claude for every Catalyst OS workflow — better Substack drafts, sharper consulting pitches, more precise legal formatting. Better prompts = better output without paying for better models.",
+    priority:"core",
+    workflow:["promptingguide.ai","Study: Chain-of-Thought, Tree-of-Thought, ReAct prompting","Apply to your most-used prompts: content pipeline, legal formatting","Build a Catalyst OS prompt library using advanced techniques","Result: significantly better outputs from same Claude model"]
+  },
+  {
+    id:58, name:"Anthropic Tutorial", cat:"learning",
+    tagline:"9 chapters. Jupyter notebooks.",
+    catalystUse:"Foundation for building client AI tools — master the Claude API so you can build custom chambers tools, SMM automation, Sneakers Fest systems professionally. The 9 chapters cover everything from basic calls to advanced multi-turn agents.",
+    priority:"high",
+    workflow:["github.com/anthropics/anthropic-cookbook","Work through 9 chapters in order","Focus on: tool use, multi-turn conversations, vision, long context","Build your first client deliverable by chapter 5","Reference back when building specific consulting tools"]
+  },
+  {
+    id:59, name:"SkillsMP", cat:"learning",
+    tagline:"80,000+ community skills marketplace.",
+    catalystUse:"Search for highly specific skills the official repo doesn't have — 'Nigerian legal document formatting', 'Afrobeats industry analysis', 'event management brief writer'. If it exists in 80K skills, no need to build from scratch.",
+    priority:"high",
+    workflow:["skillsmp.com","Search specific use case: 'event management', 'social media proposal'","Filter by installs and rating","Download SKILL.md and install in Claude environment","Test before relying on — community quality varies"]
+  },
+  {
+    id:60, name:"Anthropic Docs", cat:"learning",
+    tagline:"Read this before building anything.",
+    catalystUse:"The non-negotiable foundation. Every time you're building a new Catalyst OS tool using Claude — read the relevant docs section first. Rate limits, context windows, pricing, prompt caching. Knowing the constraints saves you from expensive mistakes.",
+    priority:"core",
+    workflow:["docs.anthropic.com","Bookmark: Models, Rate Limits, Pricing, Prompt Caching","Read prompt caching docs immediately — saves 90% on high-volume tasks","Reference before building any production AI feature","Check monthly — Anthropic ships fast, docs change often"]
+  }
+];
+
+const CAT_LABELS = {
+  coding:"CODING", agents:"AGENTS", mcp:"MCP", skills:"SKILLS",
+  local:"LOCAL AI", automation:"AUTOMATION", data:"DATA/RAG",
+  infra:"INFRA", learning:"LEARNING"
+};
+
+let currentCat = 'all';
+let currentPri = 'all';
+let currentSearch = '';
+
+function buildGrid() {
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = '';
+  TOOLS.forEach(t => {
+    const card = document.createElement('div');
+    card.className = `tool-card priority-${t.priority}`;
+    card.dataset.cat = t.cat;
+    card.dataset.pri = t.priority;
+    card.dataset.name = t.name.toLowerCase();
+    card.dataset.use = t.catalystUse.toLowerCase();
+    card.id = `card-${t.id}`;
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-num">${String(t.id).padStart(2,'0')}</div>
+        <div class="card-badges">
+          <span class="cat-badge cat-${t.cat}">${CAT_LABELS[t.cat]}</span>
+          <span class="priority-dot ${t.priority}"></span>
+        </div>
+      </div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-tagline">${t.tagline}</div>
+      <div class="divider"></div>
+      <div class="catalyst-label">CATALYST USE</div>
+      <div class="catalyst-use">${t.catalystUse.length > 140 ? t.catalystUse.slice(0,140)+'...' : t.catalystUse}</div>
+      <div class="card-footer">
+        <span class="priority-label ${t.priority}">${t.priority === 'core' ? '● USE NOW' : t.priority === 'high' ? '● 30 DAYS' : '● Q3/Q4'}</span>
+        <span class="action-hint">tap for workflow →</span>
+      </div>
+    `;
+    card.onclick = () => openModal(t);
+    grid.appendChild(card);
+  });
+  filterTools();
+}
+
+function filterTools() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  currentSearch = search;
+  let count = 0;
+  TOOLS.forEach(t => {
+    const card = document.getElementById(`card-${t.id}`);
+    const catMatch = currentCat === 'all' || t.cat === currentCat;
+    const priMatch = currentPri === 'all' || t.priority === currentPri;
+    const searchMatch = !search || t.name.toLowerCase().includes(search) || t.catalystUse.toLowerCase().includes(search) || t.tagline.toLowerCase().includes(search);
+    if (catMatch && priMatch && searchMatch) {
+      card.classList.remove('hidden'); count++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  document.getElementById('resultsCount').textContent = `${count} tool${count!==1?'s':''}`;
+  document.getElementById('noResults').classList.toggle('visible', count === 0);
+}
+
+function setCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTools();
+}
+
+function setPri(pri, btn) {
+  currentPri = pri;
+  document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTools();
+}
+
+function openModal(t) {
+  document.getElementById('modalNum').textContent = `#${String(t.id).padStart(2,'0')} · ${CAT_LABELS[t.cat]}`;
+  document.getElementById('modalName').textContent = t.name;
+  document.getElementById('modalTagline').textContent = t.tagline;
+  const priorityColor = t.priority === 'core' ? 'var(--orange)' : t.priority === 'high' ? 'var(--amber)' : 'var(--blue)';
+  const priorityLabel = t.priority === 'core' ? 'CORE — USE NOW' : t.priority === 'high' ? 'HIGH VALUE — IMPLEMENT IN 30 DAYS' : 'FUTURE BUILD — Q3/Q4';
+  let workflowHTML = '';
+  if (t.workflow) {
+    workflowHTML = `
+      <div class="modal-section">
+        <div class="modal-section-title">CATALYST IMPLEMENTATION STEPS</div>
+        ${t.workflow.map((step, i) => `
+          <div class="workflow-step">
+            <span class="step-num">${String(i+1).padStart(2,'0')}</span>
+            <span class="step-text">${step}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">PRIORITY</div>
+      <div style="display:inline-block;padding:4px 12px;border:1px solid ${priorityColor};color:${priorityColor};font-family:'JetBrains Mono';font-size:10px;letter-spacing:2px;">${priorityLabel}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">YOUR USE CASE — CATALYST OS</div>
+      <div class="modal-text">${t.catalystUse}</div>
+    </div>
+    ${workflowHTML}
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+
+buildGrid();
+</script>
+</body>
+</html>

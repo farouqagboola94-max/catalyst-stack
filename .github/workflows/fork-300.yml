@@ -1,0 +1,49 @@
+name: Fork 300 Repositories
+
+# Runs the curated 300-repo fork script. Scheduled monthly and manually
+# triggerable from the Actions tab, as documented in the README.
+on:
+  schedule:
+    # 00:00 UTC on the 1st of every month
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fork:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run fork script
+        # GH_TOKEN needs a PAT with `repo` + `workflow` scope stored as the
+        # FORK_TOKEN secret; the default GITHUB_TOKEN cannot fork to your
+        # personal account.
+        env:
+          GH_TOKEN: ${{ secrets.FORK_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::FORK_TOKEN secret is not set. Add a PAT with 'repo' + 'workflow' scope."
+            exit 1
+          fi
+          bash fork_300.sh | tee fork_run.log
+
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fork-run-log
+          path: fork_run.log
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Fork run complete"
+            echo ""
+            echo "Forks land in \`github.com/${{ github.repository_owner }}\`."
+            echo "See the **fork-run-log** artifact for per-repo results."
+          } >> "$GITHUB_STEP_SUMMARY"

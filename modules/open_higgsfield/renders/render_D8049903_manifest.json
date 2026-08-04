@@ -1,0 +1,17 @@
+{
+  "render_id": "D8049903",
+  "prompt": "Cinematic brand teaser, silhouette, Lagos skyline reveal",
+  "style": "cinematic",
+  "resolution": "2560x1080",
+  "aspect_ratio": "21:9",
+  "duration_sec": 8,
+  "fps": 24,
+  "total_frames": 192,
+  "estimated_gpu_seconds": 153.6,
+  "motion_type": "slow_dolly",
+  "lighting": "golden_hour",
+  "grain": 0.15,
+  "output_path": "/home/claude/CatalystOS/modules/open_higgsfield/renders/render_D8049903.mp4",
+  "status": "QUEUED",
+  "timestamp": "2026-05-08T02:13:35.043034"
+}

@@ -1,0 +1,47 @@
+# Catalyst Concepts — Brand Pack
+
+Lagos Noir identity, built to the house style ("Forge Systematics" — see
+[`PHILOSOPHY.md`](./PHILOSOPHY.md)). Regenerate anytime with
+`scratchpad/build_brand.py`.
+
+| Asset | File | Size | Use |
+|-------|------|------|-----|
+| Brand cover | `catalyst-brand-cover.png` | 1600×900 | Deck cover, site hero, LinkedIn banner |
+| Social header | `catalyst-social-header.png` | 1500×500 | X / Twitter header (3:1) |
+| Business card | `catalyst-business-card.png` | 1050×600 | 3.5×2 in @ 300 DPI, print-ready |
+| Sneakers Fest poster | `catalyst-sneakersfest-poster.png` | 1080×1350 | IG portrait + printable event poster |
+| Substack cover | `catalyst-substack-cover.png` | 1200×600 | "The Great Sabotage" publication header |
+| Logo lockup sheet | `catalyst-logo-lockup.png` | 1600×1000 | Mark + wordmark + palette + type spec |
+| IG carousel (3 slides) | `catalyst-ig-carousel-{1-cover,2-body,3-cta}.png` | 1080×1350 | Reusable thread template |
+| Sneakers Fest story | `catalyst-sneakersfest-story.png` | 1080×1920 | IG/FB story |
+| Sneakers Fest ticket | `catalyst-sneakersfest-ticket.png` | 1400×520 | General-admission ticket |
+| Sponsor deck cover | `catalyst-sneakersfest-sponsor-cover.png` | 1600×900 | Partnership prospectus cover |
+| Sneakers Fest carousel (filled) | `catalyst-sf-carousel-{1,2,3}.png` | 1080×1350 | Announcement carousel |
+
+## Palette
+| Token | Hex | Role |
+|-------|-----|------|
+| Void | `#0A0A0A` | Background |
+| Forge | `#FF6A00` | The one accent — used sparingly |
+| Off-white | `#F0EDE6` | Primary type |
+| Dim | `#6A6A66` | Labels / metadata |
+| Line | `#242424` | Hairline rules |
+
+## Type
+- **Big Shoulders (Bold)** — the condensed display wordmark (CATALYST CONCEPTS).
+- **JetBrains Mono** — clinical labels, coordinates, registry, contact lines.
+- **Crimson Pro Italic** — the single refined tagline gesture.
+
+## Rules
+- One source of fire. Forge orange appears once or twice per piece, never as fill.
+- Type is the structure: one word huge, everything else tiny mono.
+- Negative space is the most expensive element — protect it.
+- Facts pulled from the CEO card: BN 9405192, Lagos; X @Catalyst188, IG @Catalystggg.
+
+> Note: the renderer used here drops content in the bottom ~15% of a canvas, so
+> layouts keep everything in the top ~82% by design — the lower margin is
+> intentional.
+
+
+## Sneakers Fest 2026
+Venue: **Muri Okun Place Park, Victoria Island (VI), Lagos** · Dec 12, 2026.

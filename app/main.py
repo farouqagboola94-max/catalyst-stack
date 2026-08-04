@@ -1,0 +1,308 @@
+"""
+CatalystOS — the terminal.
+
+A small FastAPI service that ties the uploaded artifacts together into one
+runnable surface:
+
+  * Mounts the ComfyUI **video lane** router from the Open Source Arsenal
+    (``arsenal/register_comfyui.py``), so the local zero-cost engine is
+    queryable and health-checkable.
+  * Exposes the arsenal registry (``arsenal/registry/arsenal.json``) so you can
+    see every registered module.
+  * Implements the Switchboard routing rule from the integration runbook: video
+    jobs go to the LOCAL lane first, and fall back to the rented cloud GPU when
+    local VRAM is short or the engine is offline.
+  * Serves the Catalyst Concepts services portfolio at ``/`` and ``/services``.
+
+Run it:
+
+    uvicorn app.main:app --reload --port 7001
+
+Then open http://127.0.0.1:7001 for the portfolio, or
+http://127.0.0.1:7001/docs for the API.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from typing import Any, Dict, List
+
+import httpx
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse, JSONResponse
+
+from arsenal.register_comfyui import router as comfyui_router
+from app.skills_engine import router as skills_router
+from app.video_engine import router as video_router
+from app import skills_engine, video_engine
+
+# --------------------------------------------------------------------------
+# Paths
+# --------------------------------------------------------------------------
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+ARSENAL_DIR = Path(os.environ.get("ARSENAL_DIR", REPO_ROOT / "arsenal"))
+REGISTRY_PATH = Path(
+    os.environ.get("ARSENAL_REGISTRY", ARSENAL_DIR / "registry" / "arsenal.json")
+)
+PORTFOLIO_HTML = REPO_ROOT / "web" / "services.html"
+
+# Where the switchboard sends video jobs when the local lane is down. Set this
+# to your rented RunPod/Vast endpoint. Falls back to the ComfyUI default host so
+# the route is always well-defined.
+CLOUD_GPU_BASE = os.environ.get("COMFYUI_CLOUD_BASE", "")
+
+app = FastAPI(
+    title="CatalystOS",
+    version="0.1.0",
+    description="The terminal — Open Source Arsenal, video lane, and services surface.",
+)
+
+# The ComfyUI video lane: /arsenal/comfyui, /arsenal/comfyui/health, /generate.
+app.include_router(comfyui_router)
+# The Skills Engine (lit): /api/skills, /search, /category, /stack, /{id}.
+app.include_router(skills_router)
+# The Video Engine (lit): /api/video/workflows, /health, /run.
+app.include_router(video_router)
+
+
+# --------------------------------------------------------------------------
+# Registry
+# --------------------------------------------------------------------------
+
+def _load_registry() -> Dict[str, Any]:
+    """The arsenal is whatever cards are on the rack.
+
+    Every ``arsenal/*.arsenal.json`` file is a module card and is the source of
+    truth. Drop a new card in that folder and it shows up here — no code change,
+    no rebuild. Files starting with ``_`` (e.g. the template) are skipped.
+
+    Falls back to the compiled ``registry/arsenal.json`` snapshot if the folder
+    can't be scanned (e.g. a packaged deploy).
+    """
+    modules: List[Dict[str, Any]] = []
+    seen: set = set()
+    if ARSENAL_DIR.is_dir():
+        for card_path in sorted(ARSENAL_DIR.glob("*.arsenal.json")):
+            if card_path.name.startswith("_"):
+                continue
+            try:
+                card = json.loads(card_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                continue
+            mod_id = card.get("id")
+            if mod_id and mod_id not in seen:
+                seen.add(mod_id)
+                modules.append(card)
+    if modules:
+        return {"modules": modules}
+    if REGISTRY_PATH.exists():
+        return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    return {"modules": []}
+
+
+@app.get("/arsenal", tags=["arsenal"])
+def list_arsenal() -> Dict[str, Any]:
+    """List every module registered in the Open Source Arsenal."""
+    registry = _load_registry()
+    modules: List[Dict[str, Any]] = registry.get("modules", [])
+    return {
+        "count": len(modules),
+        "registry": str(REGISTRY_PATH),
+        "modules": [
+            {
+                "id": m.get("id"),
+                "codename": m.get("codename"),
+                "display_name": m.get("display_name"),
+                "tier": m.get("tier"),
+                "category": m.get("category"),
+                "status": m.get("status"),
+                "lane": m.get("routing", {}).get("lane"),
+            }
+            for m in modules
+        ],
+    }
+
+
+# --------------------------------------------------------------------------
+# Switchboard — video lane routing (runbook §4)
+# --------------------------------------------------------------------------
+
+async def _local_video_lane_up() -> Dict[str, Any]:
+    """Probe the local ComfyUI engine health endpoint from the module record."""
+    registry = _load_registry()
+    module = next((m for m in registry.get("modules", []) if m.get("id") == "comfyui"), None)
+    if module is None:
+        return {"up": False, "reason": "comfyui not registered in arsenal"}
+
+    runtime = module.get("runtime", {})
+    base = os.environ.get("COMFYUI_API_BASE", runtime.get("api_base", "http://127.0.0.1:8188"))
+    health_ep = runtime.get("health_endpoint", "/system_stats")
+    url = base.rstrip("/") + health_ep
+    try:
+        async with httpx.AsyncClient(timeout=4.0) as client:
+            resp = await client.get(url)
+        return {"up": resp.status_code == 200, "endpoint": url, "status_code": resp.status_code}
+    except Exception as exc:  # engine offline / unreachable
+        return {"up": False, "endpoint": url, "error": str(exc)}
+
+
+@app.post("/switchboard/video", tags=["switchboard"])
+async def route_video_job(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Route a video job to the local lane first, cloud GPU as fallback.
+
+    Body: ``{"workflow": <comfyui api-format json>, "project_code": "WC2026"}``
+
+    Returns the lane chosen and (when routed) the engine's queue response. The
+    lane choice is logged to stdout so you can track the local-vs-paid split,
+    the same way the 80/20 model split is tracked.
+    """
+    workflow = payload.get("workflow")
+    project_code = payload.get("project_code", "UNSPECIFIED")
+
+    local = await _local_video_lane_up()
+    if local.get("up"):
+        lane, base = "LOCAL_ZERO_COST", os.environ.get("COMFYUI_API_BASE", "http://127.0.0.1:8188")
+    elif CLOUD_GPU_BASE:
+        lane, base = "CLOUD_GPU_FALLBACK", CLOUD_GPU_BASE
+    else:
+        # No local engine and no cloud fallback configured.
+        print(f"[switchboard] project={project_code} lane=NONE (local down, no cloud base)")
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Local video lane is down and COMFYUI_CLOUD_BASE is not set. "
+                "Start ComfyUI locally or configure a rented GPU endpoint."
+            ),
+        )
+
+    print(f"[switchboard] project={project_code} lane={lane} base={base}")
+
+    if not workflow:
+        # No workflow to queue — this was a routing probe. Report the decision.
+        return {"routed": False, "lane": lane, "base": base, "local_health": local}
+
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(base.rstrip("/") + "/prompt", json={"prompt": workflow})
+        resp.raise_for_status()
+        return {"routed": True, "lane": lane, "base": base, "engine_response": resp.json()}
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"{lane} engine call failed: {exc}")
+
+
+# --------------------------------------------------------------------------
+# Portfolio + web pages
+# --------------------------------------------------------------------------
+
+WEB_DIR = REPO_ROOT / "web"
+SKILLS_DIR = REPO_ROOT / "skills"
+
+# Named static HTML pages served by the terminal. Add a file to web/ and a
+# line here to publish it.
+WEB_PAGES: Dict[str, str] = {
+    "services": "services.html",
+    "ceo": "ceo-slide.html",
+    "skills": "skills-registry.html",
+    "skills/cheatsheet": "skills-cheatsheet.html",
+    "skills/hub": "skills-hub.html",
+    "ai-hub": "ai-hub.html",
+    "runner": "runner.html",
+}
+
+
+def _serve_page(filename: str) -> HTMLResponse:
+    path = WEB_DIR / filename
+    if path.exists():
+        return HTMLResponse(path.read_text(encoding="utf-8"))
+    raise HTTPException(status_code=404, detail=f"Missing {filename}")
+
+
+@app.get("/", response_class=HTMLResponse, tags=["web"])
+@app.get("/services", response_class=HTMLResponse, tags=["web"])
+def services_portfolio() -> HTMLResponse:
+    """Serve the Catalyst Concepts services portfolio page."""
+    return _serve_page("services.html")
+
+
+@app.get("/ceo", response_class=HTMLResponse, tags=["web"])
+def ceo_card() -> HTMLResponse:
+    """Serve the CEO business-card slide."""
+    return _serve_page("ceo-slide.html")
+
+
+@app.get("/skills", response_class=HTMLResponse, tags=["web"])
+def skills_registry_page() -> HTMLResponse:
+    """Serve the visual skills registry page."""
+    return _serve_page("skills-registry.html")
+
+
+@app.get("/skills/cheatsheet", response_class=HTMLResponse, tags=["web"])
+def skills_cheatsheet_page() -> HTMLResponse:
+    """Serve the printable skills cheatsheet."""
+    return _serve_page("skills-cheatsheet.html")
+
+
+@app.get("/skills/hub", response_class=HTMLResponse, tags=["web"])
+def skills_hub_page() -> HTMLResponse:
+    """Serve the skills integration hub."""
+    return _serve_page("skills-hub.html")
+
+
+@app.get("/ai-hub", response_class=HTMLResponse, tags=["web"])
+def ai_hub_page() -> HTMLResponse:
+    """Serve the 60-tool AI integration hub."""
+    return _serve_page("ai-hub.html")
+
+
+@app.get("/runner", response_class=HTMLResponse, tags=["web"])
+def runner_page() -> HTMLResponse:
+    """Serve the Skill Runner console — drives every skill/stack via the brain."""
+    return _serve_page("runner.html")
+
+
+@app.get("/skills.json", tags=["skills"])
+def skills_index() -> Dict[str, Any]:
+    """List every skill markdown file on the rack, grouped by category folder."""
+    out: Dict[str, List[str]] = {}
+    if SKILLS_DIR.is_dir():
+        for md in sorted(SKILLS_DIR.rglob("*.md")):
+            if md.name == "README.md" or md.name.endswith("CLAUDE.md"):
+                continue
+            category = md.parent.name if md.parent != SKILLS_DIR else "root"
+            out.setdefault(category, []).append(md.stem)
+    total = sum(len(v) for v in out.values())
+    return {"total_skills": total, "categories": out}
+
+
+@app.get("/status", tags=["system"])
+async def status() -> JSONResponse:
+    """One-shot health of the whole terminal: registry + video lane."""
+    registry = _load_registry()
+    local = await _local_video_lane_up()
+    return JSONResponse(
+        {
+            "os": "CatalystOS",
+            "version": app.version,
+            "arsenal_modules": len(registry.get("modules", [])),
+            "video_lane": {
+                "engine": "comfyui",
+                "up": local.get("up", False),
+                "detail": local,
+                "cloud_fallback_configured": bool(CLOUD_GPU_BASE),
+                "mode": "live" if local.get("up") else "dry-run (start ComfyUI or set COMFYUI_CLOUD_BASE)",
+                "workflows": len(video_engine._catalog()),
+            },
+            "portfolio_available": PORTFOLIO_HTML.exists(),
+            "skills_on_rack": len([p for p in (SKILLS_DIR.rglob("*.md") if SKILLS_DIR.is_dir() else []) if p.name != "README.md" and not p.name.endswith("CLAUDE.md")]),
+            "skills_engine": {
+                "can_run": bool(skills_engine.LLM_KEY),
+                "brain_base": skills_engine.LLM_BASE,
+                "brain_model": skills_engine.LLM_MODEL,
+                "mode": "live" if skills_engine.LLM_KEY else "dry-run (set CATALYST_LLM_KEY)",
+            },
+            "web_pages": sorted(WEB_PAGES.keys()),
+        }
+    )

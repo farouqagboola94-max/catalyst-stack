@@ -1,0 +1,42 @@
+{
+  "id": "REPLACE_ME_unique_slug",
+  "codename": "OPTIONAL_CODENAME",
+  "display_name": "Human Readable Name",
+  "tier": "GRAIL | CORE | UTILITY",
+  "category": "video_generation_local | image | audio | llm | scraping | skill | connector | ...",
+  "status": "REGISTERED",
+  "one_liner": "One plain sentence: what is this and why do I own it.",
+  "source": {
+    "repo": "https://github.com/... (or the app's site)",
+    "license": "MIT | GPL-3.0 | proprietary | n/a",
+    "note": "Anything you want to remember about where this came from."
+  },
+  "runtime": {
+    "local": true,
+    "token_cost": 0,
+    "api_base": "http://127.0.0.1:PORT",
+    "health_endpoint": "/health",
+    "note": "For a connector (Airtable/Notion/etc.) set local=false and drop api_base; the plug lives in code, not here."
+  },
+  "routing": {
+    "lane": "LOCAL_ZERO_COST | CLOUD_PAID | CONNECTOR",
+    "switchboard_role": "what kind of job this handles, e.g. image_lane"
+  },
+  "capabilities": [
+    "list", "the", "concrete", "things", "this", "can", "do"
+  ],
+  "workflows": [
+    {
+      "file": "workflows/<engine>/<name>.json",
+      "kind": "what this recipe produces",
+      "project_code": "WC2026 | SNEAKFEST | COMICIP | UGC_ADS",
+      "note": "optional"
+    }
+  ],
+  "project_mappings": [
+    {
+      "project_code": "WC2026",
+      "use": "How this tool serves that project."
+    }
+  ]
+}

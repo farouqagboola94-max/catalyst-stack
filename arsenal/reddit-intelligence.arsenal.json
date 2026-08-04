@@ -1,0 +1,17 @@
+{
+  "id": "reddit-intelligence",
+  "codename": "DEEP LISTENING",
+  "display_name": "CatalystOS Reddit Intelligence",
+  "tier": "UTILITY",
+  "category": "audience_intelligence",
+  "status": "REGISTERED",
+  "one_liner": "Extract actionable content strategy from real audience psychology on Reddit — mines subreddits for pain points, language, and hooks.",
+  "source": {"repo": "local", "license": "internal", "note": "Needs Reddit (PRAW) + Anthropic keys in env; see modules/reddit-intelligence/.env.example."},
+  "runtime": {"local": true, "token_cost": 0, "note": "Python module + CLI (reddit_cli.py). Not an HTTP engine; run via CLI or import."},
+  "routing": {"lane": "INTELLIGENCE", "switchboard_role": "research_lane"},
+  "capabilities": ["subreddit_mining", "pain_point_extraction", "audience_language_analysis", "content_hook_generation", "sheets_export"],
+  "project_mappings": [
+    {"project_code": "SMM", "use": "Feed real audience language into client social strategy."},
+    {"project_code": "SUBSTACK", "use": "Source essay angles from live discourse."}
+  ]
+}

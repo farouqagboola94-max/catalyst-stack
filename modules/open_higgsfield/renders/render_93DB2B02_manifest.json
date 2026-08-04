@@ -1,0 +1,17 @@
+{
+  "render_id": "93DB2B02",
+  "prompt": "Sneaker rotating on display podium, studio product shot",
+  "style": "commercial",
+  "resolution": "1080x1080",
+  "aspect_ratio": "1:1",
+  "duration_sec": 6,
+  "fps": 24,
+  "total_frames": 144,
+  "estimated_gpu_seconds": 115.2,
+  "motion_type": "smooth_track",
+  "lighting": "studio_soft",
+  "grain": 0.05,
+  "output_path": "/home/claude/CatalystOS/modules/open_higgsfield/renders/render_93DB2B02.mp4",
+  "status": "QUEUED",
+  "timestamp": "2026-05-08T02:13:35.042341"
+}
