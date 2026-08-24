@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Catalyst">
+  <rect width="64" height="64" fill="#06060d"/>
+  <path d="M32 6 L54 19 v26 L32 58 L10 45 V19 Z" fill="none" stroke="#F4B800" stroke-width="3"/>
+  <path d="M35 16 L20 36 h10 l-3 14 15-21H32 Z" fill="#C41E3A"/>
+</svg>

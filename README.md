@@ -100,4 +100,26 @@ Have a repo that should be included? Submit a PR or open an issue!
 
 ---
 
+## 🌍 The Catalyst World Site
+
+This repository also hosts **the personal world site** — the hub that introduces the
+**Lagos Mafia Strategy** and links to every project and portfolio.
+
+| Page | What it is |
+|------|------------|
+| `site/index.html` | The Cave — home |
+| `site/doctrine.html` | **The Lagos Mafia Strategy** — five laws, one loop, four layers, ten rules |
+| `site/work.html` | Every project, repository and portfolio |
+| `site/universe.html` | The CatalystVerse — gateway to the comic |
+| `site/contact.html` | Collaboration, licensing, press |
+
+Static HTML, no build step. `netlify.toml` publishes `site/`.
+Full details in [`site/README.md`](./site/README.md).
+
+```bash
+cd site && python3 -m http.server 8080
+```
+
+---
+
 **Status:** Ready to fork! 🚀
