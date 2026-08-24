@@ -15,15 +15,21 @@
 <meta property="og:title" content="The Lagos Mafia Strategy">
 <meta property="og:description" content="Five laws, one loop, four layers, ten rules. A doctrine for building world-class IP from Lagos.">
 <meta property="og:url" content="https://catalyst-world.netlify.app/doctrine.html">
+<meta property="og:image" content="https://catalyst-world.netlify.app/assets/img/og-doctrine.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Lagos Mafia Strategy — doctrine">
 <meta property="og:locale" content="en_NG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Lagos Mafia Strategy">
 <meta name="twitter:description" content="Five laws, one loop, four layers, ten rules. A doctrine for building world-class IP from Lagos.">
+<meta name="twitter:image" content="https://catalyst-world.netlify.app/assets/img/og-doctrine.jpg">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/bebas-neue-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oswald-600.woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/catalyst.css">
 <script>document.documentElement.classList.add('js');</script>
 
@@ -52,6 +58,8 @@
   <span>Ten rules</span>
 </div>
 
+<div class="progress" aria-hidden="true"><i></i></div>
+
 <nav>
   <a class="nav-logo" href="/">CATA<span>LYST</span></a>
   <ul class="nav-links">
@@ -65,13 +73,28 @@
 
 <main id="main">
 
-  <header class="page-head">
+  <header class="page-head has-art">
+    <div class="art-bg">
+      <img src="/assets/img/noir.webp" alt="" width="1200" height="896" fetchpriority="high" decoding="sync">
+    </div>
     <div class="wrap">
       <p class="eyebrow eyebrow--red">Doctrine · Version 1.0 · Lagos</p>
       <h1>The Lagos<br><span class="gold">Mafia Strategy</span></h1>
       <p class="lede">A doctrine for building world-class intellectual property from Lagos — owned at the source, run by one operator with a fleet of machines, and compounded in public until the body of work itself becomes the argument.</p>
     </div>
   </header>
+
+  <nav class="doc-rail" aria-label="Doctrine sections">
+    <ol>
+      <li><a href="#definition">§00 Definition</a></li>
+      <li><a href="#laws">§01 Five Laws</a></li>
+      <li><a href="#loop">§02 Loop</a></li>
+      <li><a href="#stack">§03 Layers</a></li>
+      <li><a href="#rules">§04 Rules</a></li>
+      <li><a href="#measure">§05 Measurement</a></li>
+      <li><a href="#for">§06 Standing</a></li>
+    </ol>
+  </nav>
 
   <!-- 00 · DEFINITION -->
   <section id="definition" class="section--sunken">
@@ -106,7 +129,7 @@
       <article class="law reveal">
         <div class="law-num">01<small>Ownership</small></div>
         <div>
-          <h3 class="law-title">Own the source</h3>
+          <h3 class="law-title" id="law-own-the-source">Own the source<a class="anchor" href="#law-own-the-source" aria-label="Link to this law">#</a></h3>
           <p class="law-axiom">&ldquo;Never rent the universe you are building. If someone else can revoke it, it was never yours.&rdquo;</p>
           <div class="law-spec">
             <div>
@@ -132,7 +155,7 @@
       <article class="law reveal">
         <div class="law-num">02<small>Leverage</small></div>
         <div>
-          <h3 class="law-title">Leverage over labour</h3>
+          <h3 class="law-title" id="law-leverage-over-labour">Leverage over labour<a class="anchor" href="#law-leverage-over-labour" aria-label="Link to this law">#</a></h3>
           <p class="law-axiom">&ldquo;One operator, a fleet of machines. Never do by hand what can be done by a standing instrument.&rdquo;</p>
           <div class="law-spec">
             <div>
@@ -158,7 +181,7 @@
       <article class="law reveal">
         <div class="law-num">03<small>Evidence</small></div>
         <div>
-          <h3 class="law-title">Ship in public</h3>
+          <h3 class="law-title" id="law-ship-in-public">Ship in public<a class="anchor" href="#law-ship-in-public" aria-label="Link to this law">#</a></h3>
           <p class="law-axiom">&ldquo;The archive is the proof. Nothing counts until a stranger can open it.&rdquo;</p>
           <div class="law-spec">
             <div>
@@ -184,7 +207,7 @@
       <article class="law reveal">
         <div class="law-num">04<small>Position</small></div>
         <div>
-          <h3 class="law-title">Local blood, global reach</h3>
+          <h3 class="law-title" id="law-local-blood-global-reach">Local blood, global reach<a class="anchor" href="#law-local-blood-global-reach" aria-label="Link to this law">#</a></h3>
           <p class="law-axiom">&ldquo;Be specific enough to be from somewhere. Be legible enough to travel anywhere.&rdquo;</p>
           <div class="law-spec">
             <div>
@@ -210,7 +233,7 @@
       <article class="law reveal">
         <div class="law-num">05<small>Compounding</small></div>
         <div>
-          <h3 class="law-title">Compound the stack</h3>
+          <h3 class="law-title" id="law-compound-the-stack">Compound the stack<a class="anchor" href="#law-compound-the-stack" aria-label="Link to this law">#</a></h3>
           <p class="law-axiom">&ldquo;Every project must lower the cost of the next one. If it does not, it is a hobby.&rdquo;</p>
           <div class="law-spec">
             <div>

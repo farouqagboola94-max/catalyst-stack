@@ -15,15 +15,20 @@
 <meta property="og:title" content="The CatalystVerse">
 <meta property="og:description" content="A Lagos noir universe rooted in Yoruba mythology. Eleven arcs. Free to read.">
 <meta property="og:url" content="https://catalyst-world.netlify.app/universe.html">
+<meta property="og:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_NG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The CatalystVerse">
 <meta name="twitter:description" content="A Lagos noir universe rooted in Yoruba mythology. Eleven arcs. Free to read.">
+<meta name="twitter:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/bebas-neue-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oswald-600.woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/catalyst.css">
 <script>document.documentElement.classList.add('js');</script>
 
@@ -51,7 +56,10 @@
 
 <main id="main">
 
-  <header class="page-head">
+  <header class="page-head has-art">
+    <div class="art-bg">
+      <img src="/assets/img/lagos-spirits.webp" alt="" width="980" height="980" fetchpriority="high" decoding="sync">
+    </div>
     <div class="wrap">
       <p class="eyebrow">§ Canon · Layer 04</p>
       <h1>The<br><span class="gold">CatalystVerse</span></h1>
@@ -81,35 +89,44 @@
         <h2>Vessels of ancient power</h2>
         <p class="lede">Full dossiers — power tiers, Aṣẹ ratings, allegiances and histories — are on the universe site.</p>
       </div>
-      <div class="grid grid--4 reveal">
-        <div class="card">
-          <h4 class="gold">Vessel of All Orishas</h4>
-          <h3>Catalyst</h3>
-          <p class="muted" style="font-size:.85rem;">Adebayo &ldquo;Bayo&rdquo; Adeyemi</p>
-          <p>Aṣẹ amplifier. Nineteen, from Mushin. Carries every Orisha at once — the thing the cosmology says should not be survivable.</p>
-          <div class="tag-row"><span class="tag tag--canon">Aṣẹ 97</span></div>
-        </div>
-        <div class="card">
-          <h4 class="red">Ṣàngó&rsquo;s Chosen</h4>
-          <h3>Thunderstrike</h3>
-          <p class="muted" style="font-size:.85rem;">Amara Okafor</p>
-          <p>Lightning drummer. Channels Ṣàngó through the talking drum — the rhythm is the conduit, not a flourish.</p>
-          <div class="tag-row"><span class="tag">Aṣẹ 78 · Speed 91</span></div>
-        </div>
-        <div class="card">
-          <h4 class="teal">Ògún&rsquo;s Iron</h4>
-          <h3>Iron Wolf</h3>
-          <p class="muted" style="font-size:.85rem;">Ikenna Chukwuemeka</p>
-          <p>Living iron armour and the embodiment of Ògún. The heaviest hand in the circle, and the slowest to raise it.</p>
-          <div class="tag-row"><span class="tag">Combat 96</span></div>
-        </div>
-        <div class="card">
-          <h4>The Keeper</h4>
-          <h3>The Oracle</h3>
-          <p class="muted" style="font-size:.85rem;">Chief Adesanya Adewale</p>
-          <p>Ancient keeper, master of Ifá wisdom. Holds the record of the war that never ended, and decides how much of it anyone is ready to hear.</p>
-          <div class="tag-row"><span class="tag tag--canon">Aṣẹ ∞</span></div>
-        </div>
+      <div class="grid grid--3 reveal">
+        <article class="portrait">
+          <div class="portrait-img"><img src="/assets/img/bayo.webp" alt="Catalyst — Adebayo Adeyemi, Orisha markings lit gold" width="560" height="560" loading="lazy" decoding="async"></div>
+          <div class="portrait-body">
+            <h4 class="gold">Vessel of All Orishas</h4>
+            <h3>Catalyst</h3>
+            <p class="portrait-alias">Adebayo &ldquo;Bayo&rdquo; Adeyemi</p>
+            <p>Aṣẹ amplifier. Nineteen, from Mushin. Carries every Orisha at once — the thing the cosmology says should not be survivable.</p>
+            <div class="tag-row"><span class="tag tag--canon">Aṣẹ 97</span><span class="tag">Intel 88</span></div>
+          </div>
+        </article>
+        <article class="portrait">
+          <div class="portrait-img"><img src="/assets/img/amara.webp" alt="Thunderstrike — Amara Okafor channelling Ṣàngó through a talking drum" width="560" height="560" loading="lazy" decoding="async"></div>
+          <div class="portrait-body">
+            <h4 class="red">Ṣàngó&rsquo;s Chosen</h4>
+            <h3>Thunderstrike</h3>
+            <p class="portrait-alias">Amara Okafor</p>
+            <p>Lightning drummer. Channels Ṣàngó through the talking drum — the rhythm is the conduit, not a flourish.</p>
+            <div class="tag-row"><span class="tag">Aṣẹ 78</span><span class="tag">Speed 91</span></div>
+          </div>
+        </article>
+        <article class="portrait">
+          <div class="portrait-img"><img src="/assets/img/ikenna.webp" alt="Iron Wolf — Ikenna Chukwuemeka in living iron armour" width="560" height="560" loading="lazy" decoding="async"></div>
+          <div class="portrait-body">
+            <h4 class="teal">Ògún&rsquo;s Iron</h4>
+            <h3>Iron Wolf</h3>
+            <p class="portrait-alias">Ikenna Chukwuemeka</p>
+            <p>Living iron armour and the embodiment of Ògún. The heaviest hand in the circle, and the slowest to raise it.</p>
+            <div class="tag-row"><span class="tag">Combat 96</span><span class="tag">Aṣẹ 65</span></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="card reveal" style="margin-top:1.5rem;border-top-color:var(--danfo-gold);">
+        <h4>The Keeper</h4>
+        <h3>The Oracle &mdash; <span class="muted" style="font-family:var(--body);font-size:.85rem;letter-spacing:0;text-transform:none;">Chief Adesanya Adewale</span></h3>
+        <p>Ancient keeper, master of Ifá wisdom. Holds the record of the war that never ended, and decides how much of it anyone is ready to hear. Aṣẹ rating: unbounded.</p>
+        <div class="tag-row"><span class="tag tag--canon">Aṣẹ ∞</span><span class="tag">Ifá</span></div>
       </div>
     </div>
   </section>

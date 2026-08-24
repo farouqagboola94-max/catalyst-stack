@@ -15,15 +15,20 @@
 <meta property="og:title" content="The Work — Catalyst">
 <meta property="og:description" content="Owned IP, agent tooling, generation infrastructure and curated archives. The full index.">
 <meta property="og:url" content="https://catalyst-world.netlify.app/work.html">
+<meta property="og:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_NG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Work — Catalyst">
 <meta name="twitter:description" content="Owned IP, agent tooling, generation infrastructure and curated archives. The full index.">
+<meta name="twitter:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/bebas-neue-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oswald-600.woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/catalyst.css">
 <script>document.documentElement.classList.add('js');</script>
 
@@ -56,11 +61,21 @@
       <h1>The work<br><span class="gold">that is standing</span></h1>
       <p class="lede">Everything is ordered by the four layers of the stack rather than by date, because the order is the argument: infrastructure holds up instruments, instruments hold up the studio, and the studio exists to produce the canon.</p>
       <p class="muted" style="margin-top:1.5rem;font-size:.9rem;"><strong class="gold">Honest labelling:</strong> <span class="tag tag--canon">Authored</span> means built by me. <span class="tag">Mirrored</span> means an upstream open-source project held in my account under Law 01 — credit belongs to its maintainers.</p>
+      <div class="filters" data-filters hidden>
+        <span class="filters-k">Filter</span>
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-filter="authored" aria-pressed="false">Authored</button>
+        <button class="chip" type="button" data-filter="mirrored" aria-pressed="false">Mirrored</button>
+        <button class="chip" type="button" data-filter="canon" aria-pressed="false">Canon</button>
+        <button class="chip" type="button" data-filter="studio" aria-pressed="false">Studio</button>
+        <button class="chip" type="button" data-filter="instruments" aria-pressed="false">Instruments</button>
+        <button class="chip" type="button" data-filter="foundation" aria-pressed="false">Foundation</button>
+      </div>
     </div>
   </header>
 
   <!-- CANON -->
-  <section id="canon">
+  <section id="canon" data-group>
     <div class="wrap">
       <div class="reveal" style="margin-bottom:2.5rem;">
         <p class="eyebrow">Layer 04</p>
@@ -68,24 +83,30 @@
         <p class="lede">The owned universe. The only layer that appreciates.</p>
       </div>
       <div class="grid grid--2 reveal">
-        <a class="card" href="https://catalyst-awakening.netlify.app/" rel="noopener" style="border-top-color:var(--danfo-gold);">
+        <a class="card card--media" href="https://catalyst-awakening.netlify.app/" data-kind="authored canon" rel="noopener" style="border-top-color:var(--danfo-gold);">
+          <div class="media"><img src="/assets/img/cover-issue1.webp" alt="Catalyst: The Awakening — issue one cover art" width="620" height="930" loading="lazy" decoding="async"></div>
+          <div class="card-body">
           <h4>Flagship</h4>
           <h3 class="gold">Catalyst: The Awakening</h3>
           <p>A Lagos noir comic universe rooted in Yoruba mythology. Bayo Adeyemi is nineteen, from Mushin, and carries the Aṣẹ of every Orisha at once — Ṣàngó, Ògún, Ọ̀ṣun, Oya, Obatàlá, Ẹṣù. Eleven arcs planned, issues free to read, an interactive site with character dossiers, faction files and an Aṣẹ system.</p>
           <div class="tag-row"><span class="tag tag--canon">Authored</span><span class="tag tag--live">Live site</span><span class="tag">Free to read</span></div>
+          </div>
         </a>
-        <a class="card" href="/universe.html" style="border-top-color:var(--blood-red);">
+        <a class="card card--media" href="/universe.html" data-kind="authored canon" style="border-top-color:var(--blood-red);">
+          <div class="media"><img src="/assets/img/lagos-spirits.webp" alt="Lagos spirits — CatalystVerse key art" width="980" height="980" loading="lazy" decoding="async"></div>
+          <div class="card-body">
           <h4>Overview</h4>
           <h3 class="red">The CatalystVerse</h3>
           <p>The world behind the comic — the mythology, the city, the factions and the rules of Aṣẹ. Start here if you have not read an issue yet, then go straight to the live universe.</p>
           <div class="tag-row"><span class="tag tag--canon">Authored</span><span class="tag">Worldbuilding</span></div>
+          </div>
         </a>
       </div>
     </div>
   </section>
 
   <!-- STUDIO -->
-  <section id="studio" class="section--sunken">
+  <section id="studio" data-group class="section--sunken">
     <div class="wrap">
       <div class="reveal" style="margin-bottom:2.5rem;">
         <p class="eyebrow eyebrow--teal">Layer 03</p>
@@ -93,19 +114,19 @@
         <p class="lede">Production practice: art direction, prompt libraries, research indexes and the design templates the canon is published from.</p>
       </div>
       <div class="grid grid--3 reveal">
-        <a class="card" href="https://github.com/farouqagboola94-max/Awesome-AI-OSINT" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/Awesome-AI-OSINT" data-kind="mirrored studio" rel="noopener">
           <h4>Archive · Publishing</h4>
           <h3>Awesome AI&nbsp;OSINT</h3>
           <p>A curated index of articles, tools and research on AI applied to open-source intelligence. Also carries the design-template directory the Catalyst site is built and deployed from.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag tag--canon">+ Authored templates</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/Awesome-Nano-Banana-images" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/Awesome-Nano-Banana-images" data-kind="mirrored studio" rel="noopener">
           <h4>Art direction</h4>
           <h3>Nano Banana Gallery</h3>
           <p>A large reference gallery of image-generation cases with the prompts that produced them. The prompt library the visual house style is calibrated against.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag">Prompt library</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/generative-ai" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/generative-ai" data-kind="mirrored studio" rel="noopener">
           <h4>Reference</h4>
           <h3>Generative AI Roadmap</h3>
           <p>A structured roadmap and use-case collection across generative AI — sessions, docs and worked examples. The map I check the stack against.</p>
@@ -116,7 +137,7 @@
   </section>
 
   <!-- INSTRUMENTS -->
-  <section id="instruments">
+  <section id="instruments" data-group>
     <div class="wrap">
       <div class="reveal" style="margin-bottom:2.5rem;">
         <p class="eyebrow eyebrow--red">Layer 02</p>
@@ -124,25 +145,25 @@
         <p class="lede">The layer that replaces headcount. Agents and assistants that convert intent into shipped output.</p>
       </div>
       <div class="grid grid--2 reveal">
-        <a class="card" href="https://github.com/farouqagboola94-max/cline" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/cline" data-kind="mirrored instruments" rel="noopener">
           <h4>Coding agent</h4>
           <h3>Cline</h3>
           <p>An autonomous coding agent inside the editor — reads a codebase, plans, edits files, runs commands and drives a browser, with approval at each step. The primary instrument for build work.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag tag--forge">Daily driver</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/claude-engineer" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/claude-engineer" data-kind="mirrored instruments" rel="noopener">
           <h4>Self-extending agent</h4>
           <h3>Claude Engineer</h3>
           <p>An assistant framework that writes and manages its own tools, expanding what it can do through conversation. CLI and web interface. The reference implementation for Law 02.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag tag--forge">Tool generation</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/ai_agents_az" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/ai_agents_az" data-kind="mirrored instruments" rel="noopener">
           <h4>Workflow builds</h4>
           <h3>AI Agents A–Z</h3>
           <p>An episode-by-episode library of working n8n agent templates — prescription agents, research agents, automation chains. Assembled workflows rather than theory.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag">n8n · 30+ builds</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/buildwithclaude" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/buildwithclaude" data-kind="mirrored instruments" rel="noopener">
           <h4>Extension library</h4>
           <h3>Build with Claude</h3>
           <p>A collection of skills, agents, commands, hooks, plugins and marketplaces that extend Claude Code. Where the operator's own environment gets sharpened.</p>
@@ -153,7 +174,10 @@
   </section>
 
   <!-- FOUNDATION -->
-  <section id="foundation" class="section--raised">
+  <section id="foundation" data-group class="section--raised has-art">
+    <div class="art-bg art-bg--even">
+      <img src="/assets/img/shipyard.webp" alt="" width="1200" height="896" loading="lazy" decoding="async">
+    </div>
     <div class="wrap">
       <div class="reveal" style="margin-bottom:2.5rem;">
         <p class="eyebrow">Layer 01</p>
@@ -161,25 +185,25 @@
         <p class="lede">Open infrastructure held in my own account rather than bookmarked, so no upstream decision can strand a production pipeline.</p>
       </div>
       <div class="grid grid--2 reveal">
-        <a class="card" href="https://github.com/farouqagboola94-max/catalyst-stack" rel="noopener" style="border-top-color:var(--danfo-gold);">
+        <a class="card" href="https://github.com/farouqagboola94-max/catalyst-stack" data-kind="authored foundation" rel="noopener" style="border-top-color:var(--danfo-gold);">
           <h4>Original · The engine</h4>
           <h3 class="gold">Catalyst Stack</h3>
           <p>The fork engine that builds the foundation itself: 300 curated repositories across 23 AI and ML categories, mirrored into my account automatically on a monthly GitHub Actions schedule, with rate limiting, error handling and execution logs.</p>
           <div class="tag-row"><span class="tag tag--canon">Authored</span><span class="tag tag--forge">Automation</span><span class="tag">300 repos · 23 categories</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/ComfyUI" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/ComfyUI" data-kind="mirrored foundation" rel="noopener">
           <h4>Generation</h4>
           <h3>ComfyUI</h3>
           <p>The node-graph engine for image, video and audio generation. The visual production backbone — where comic panels, covers and character art are actually produced.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag">Diffusion · Node graph</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/Hy3-preview" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/Hy3-preview" data-kind="mirrored foundation" rel="noopener">
           <h4>Model runtime</h4>
           <h3>Hy3&nbsp;Preview</h3>
           <p>Tencent's Hunyuan Hy3 preview release, held locally for inference work. Frontier model weights kept on hand rather than accessed through a gate.</p>
           <div class="tag-row"><span class="tag">Mirrored</span><span class="tag">Inference</span></div>
         </a>
-        <a class="card" href="https://github.com/farouqagboola94-max/faster-whisper" rel="noopener">
+        <a class="card" href="https://github.com/farouqagboola94-max/faster-whisper" data-kind="mirrored foundation" rel="noopener">
           <h4>Speech</h4>
           <h3>Faster Whisper</h3>
           <p>A fast CTranslate2 reimplementation of Whisper for transcription. Turns spoken material — voice notes, dialogue passes, interviews — into text the rest of the pipeline can act on.</p>

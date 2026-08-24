@@ -1,4 +1,30 @@
 /* ==========================================================================
+   FONTS — self-hosted (latin subset). No third-party origin, no FOUT that
+   depends on Google being reachable. All four families are SIL Open Font
+   License, which permits self-hosting.
+   ========================================================================== */
+
+@font-face { font-family: 'Bebas Neue'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/assets/fonts/bebas-neue-400.woff2') format('woff2'); }
+
+@font-face { font-family: 'Oswald'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/assets/fonts/oswald-400.woff2') format('woff2'); }
+@font-face { font-family: 'Oswald'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('/assets/fonts/oswald-600.woff2') format('woff2'); }
+
+@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/assets/fonts/space-grotesk-400.woff2') format('woff2'); }
+@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('/assets/fonts/space-grotesk-600.woff2') format('woff2'); }
+@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 700;
+  font-display: swap; src: url('/assets/fonts/space-grotesk-700.woff2') format('woff2'); }
+
+@font-face { font-family: 'Crimson Pro'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/assets/fonts/crimson-pro-400.woff2') format('woff2'); }
+@font-face { font-family: 'Crimson Pro'; font-style: italic; font-weight: 400;
+  font-display: swap; src: url('/assets/fonts/crimson-pro-400-italic.woff2') format('woff2'); }
+
+/* ==========================================================================
    CATALYST — Design System
    Brand tokens inherited from Catalyst: The Awakening (catalyst-awakening.netlify.app)
    ========================================================================== */
@@ -37,13 +63,16 @@
   --maxw:   1240px;
 
   --notch: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+
+  /* Height of the fixed ticker + nav stack, used by sticky offsets. */
+  --navh: 96px;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  scroll-padding-top: calc(var(--navh) + 58px);
   -webkit-text-size-adjust: 100%;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -218,6 +247,7 @@ nav {
 /* Below this the row cannot hold logo + links + CTA, so the links wrap
    to their own line and the nav becomes two rows. */
 @media (max-width: 720px) {
+  :root { --navh: 112px; }
   nav { flex-wrap: wrap; row-gap: .55rem; padding: .8rem 1rem .9rem; }
   .nav-logo { font-size: 1.25rem; }
   .nav-links { order: 2; width: 100%; gap: 1.1rem; }
@@ -456,4 +486,158 @@ footer {
 .js .reveal.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .js .reveal { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   ART LAYERS — photographic/illustrated backgrounds behind sections
+   ========================================================================== */
+
+.art-bg { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+/* The plates are moody, low-key artwork; a brightness lift keeps them visible
+   once the legibility scrim is laid over the top. */
+.art-bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: 62% 64%;
+  filter: brightness(1.06) contrast(1.04) saturate(1.08);
+}
+.art-bg--even img { object-position: center; filter: brightness(1.05) saturate(1.05); }
+/* Scrim keeps display type legible over artwork in both directions. */
+.art-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, rgba(6,6,13,.93) 0%, rgba(6,6,13,.80) 30%, rgba(6,6,13,.34) 64%, rgba(6,6,13,.04) 100%),
+    linear-gradient(to top, var(--black) 0%, rgba(6,6,13,0) 38%);
+}
+.art-bg--even::after {
+  background: linear-gradient(to bottom, rgba(6,6,13,.90), rgba(6,6,13,.93));
+}
+/* The plate must stay out of flow — a blanket `.has-art > *` rule would
+   override its absolute positioning and push the content sideways. */
+.has-art { position: relative; isolation: isolate; }
+.has-art > .art-bg { position: absolute; inset: 0; z-index: 0; }
+.has-art > *:not(.art-bg) { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   MEDIA CARDS
+   ========================================================================== */
+
+.portrait {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--rule); border-top: 2px solid var(--rule-strong);
+  background: var(--bg-raised);
+  display: flex; flex-direction: column;
+  transition: border-color .3s, transform .3s;
+}
+.portrait:hover { border-color: var(--rule-strong); transform: translateY(-3px); }
+.portrait-img { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
+.portrait-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.portrait:hover .portrait-img img { transform: scale(1.04); }
+.portrait-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--bg-raised) 1%, rgba(6,6,13,.15) 45%, transparent 75%);
+}
+.portrait-body { padding: 1.25rem 1.35rem 1.5rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+.portrait-body p { font-size: .88rem; margin: 0; }
+.portrait-alias { font-family: var(--label); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+
+.card--media { padding: 0; overflow: hidden; }
+.card--media .media { aspect-ratio: 3 / 2; overflow: hidden; position: relative; }
+.card--media .media img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform .6s ease; }
+.card--media:hover .media img { transform: scale(1.04); }
+.card--media .card-body { padding: clamp(1.4rem, 3vw, 2rem); display: flex; flex-direction: column; gap: .85rem; flex: 1; }
+a.card--media::after { top: auto; bottom: 1.35rem; }
+
+/* ==========================================================================
+   DOCTRINE — reading progress + sticky section rail
+   ========================================================================== */
+
+.progress {
+  position: fixed; left: 0; right: 0; top: 34px; height: 2px; z-index: 1050;
+  background: transparent;
+}
+.progress i {
+  display: block; height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--blood-red), var(--danfo-gold));
+  transition: width .12s linear;
+}
+@media (max-width: 720px) { .progress { top: 30px; } }
+
+/* Horizontal sticky section index. A vertical rail would have to sit inside a
+   grid column, which would break the full-bleed section backgrounds. */
+.doc-rail {
+  position: sticky; top: var(--navh); z-index: 900;
+  background: rgba(6,6,13,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.doc-rail ol {
+  list-style: none; display: flex; gap: clamp(1rem, 2.4vw, 2.1rem);
+  overflow-x: auto; scrollbar-width: none;
+  max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter);
+}
+.doc-rail ol::-webkit-scrollbar { display: none; }
+.doc-rail a {
+  display: block; white-space: nowrap; text-decoration: none;
+  font-family: var(--label); font-size: .68rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--text-muted); padding: .95rem 0;
+  border-bottom: 2px solid transparent;
+  transition: color .25s, border-color .25s;
+}
+.doc-rail a:hover { color: var(--bone-white); }
+.doc-rail a.is-active { color: var(--danfo-gold); border-bottom-color: var(--danfo-gold); }
+
+/* Anchor affordance on each law */
+.law-title { position: relative; }
+.law-title .anchor {
+  text-decoration: none; color: var(--iron-grey);
+  font-family: var(--body); font-size: .8em; margin-left: .5rem;
+  opacity: 0; transition: opacity .25s, color .25s;
+}
+.law:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.law-title .anchor:hover { color: var(--danfo-gold); }
+
+/* ==========================================================================
+   WORK — filter chips
+   ========================================================================== */
+
+.filters { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; align-items: center; }
+.filters .filters-k {
+  font-family: var(--label); font-size: .64rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--iron-grey); margin-right: .35rem;
+}
+.chip {
+  font-family: var(--label); font-size: .68rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase;
+  padding: .5rem 1.05rem; background: transparent;
+  border: 1px solid var(--rule); color: var(--text-muted);
+  cursor: pointer; transition: border-color .25s, color .25s, background .25s;
+}
+.chip:hover { color: var(--bone-white); border-color: var(--ash-grey); }
+.chip[aria-pressed="true"] { background: var(--danfo-gold); border-color: var(--danfo-gold); color: var(--black); }
+.filter-empty { color: var(--text-muted); font-size: .92rem; padding: 1.5rem 0; }
+
+/* Sections dim out when filtered to nothing */
+[data-filtered-out] { display: none !important; }
+
+/* ==========================================================================
+   PRINT — the doctrine should print as a clean document
+   ========================================================================== */
+
+@media print {
+  :root { --bg: #fff; --text: #111; --text-muted: #333; }
+  .ticker, nav, .progress, .doc-rail, footer, .btn-row, .skip-link, .art-bg, .filters { display: none !important; }
+  body { background: #fff; color: #111; font-size: 11pt; }
+  .js .reveal, .reveal { opacity: 1 !important; transform: none !important; }
+  section { padding-block: 1.25rem; border: 0; background: #fff !important; }
+  .section--sunken, .section--raised { background: #fff !important; }
+  .page-head { padding-top: 0; }
+  h1, h2, h3 { color: #000; }
+  .gold, .red, .teal, .eyebrow, .law-num, h4 { color: #444 !important; }
+  p, .lede, .law-axiom { color: #222; }
+  .law { break-inside: avoid; border-top: 1px solid #ccc; }
+  .card, .loop-step, .layer { border-color: #ccc !important; background: #fff !important; break-inside: avoid; }
+  a { color: #000; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #666; }
+  .doc-layout { display: block; }
 }

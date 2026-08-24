@@ -15,16 +15,23 @@
 <meta property="og:title" content="Catalyst — The Cave">
 <meta property="og:description" content="A personal world built in Lagos: owned IP, an agent-run forge, and the Lagos Mafia Strategy.">
 <meta property="og:url" content="https://catalyst-world.netlify.app/">
+<meta property="og:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Catalyst — the personal world of a Lagos operator">
 <meta property="og:locale" content="en_NG">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@catalystcomicshq">
 <meta name="twitter:title" content="Catalyst — The Cave">
 <meta name="twitter:description" content="A personal world built in Lagos: owned IP, an agent-run forge, and the Lagos Mafia Strategy.">
+<meta name="twitter:image" content="https://catalyst-world.netlify.app/assets/img/og.jpg">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/bebas-neue-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oswald-600.woff2" crossorigin>
+<link rel="preload" as="image" href="/assets/img/hero-lagos.webp" fetchpriority="high">
 <link rel="stylesheet" href="/assets/css/catalyst.css">
 <script>document.documentElement.classList.add('js');</script>
 
@@ -77,7 +84,10 @@
 <main id="main">
 
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero has-art">
+    <div class="art-bg">
+      <img src="/assets/img/hero-lagos.webp" alt="" width="1200" height="896" fetchpriority="high" decoding="sync">
+    </div>
     <div class="wrap">
       <p class="eyebrow">Personal World · Lagos, Nigeria</p>
       <h1>This is<br>the cave<em>where it is made</em></h1>
@@ -151,7 +161,10 @@
   </section>
 
   <!-- DOCTRINE TEASER -->
-  <section id="doctrine-teaser">
+  <section id="doctrine-teaser" class="has-art">
+    <div class="art-bg art-bg--even">
+      <img src="/assets/img/forge.webp" alt="" width="1200" height="896" loading="lazy" decoding="async">
+    </div>
     <div class="wrap">
       <div class="grid grid--2" style="align-items:center;gap:clamp(2rem,6vw,5rem);">
         <div class="reveal">
@@ -185,11 +198,14 @@
         <p class="lede">A live universe, an engine that stocks the stack, and the tools that do the work. The full index lives on the work page.</p>
       </div>
       <div class="grid grid--3 reveal" style="margin-top:3rem;">
-        <a class="card" href="/universe.html">
-          <h4>Canon</h4>
-          <h3>Catalyst: The Awakening</h3>
-          <p>A Lagos noir comic universe rooted in Yoruba mythology. Bayo Adeyemi, nineteen, from Mushin, carrying the Aṣẹ of every Orisha at once.</p>
-          <div class="tag-row"><span class="tag tag--canon">Owned IP</span><span class="tag tag--live">Live</span></div>
+        <a class="card card--media" href="/universe.html">
+          <div class="media"><img src="/assets/img/cover-issue1.webp" alt="Catalyst: The Awakening — issue one cover art" width="620" height="930" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <h4>Canon</h4>
+            <h3>Catalyst: The Awakening</h3>
+            <p>A Lagos noir comic universe rooted in Yoruba mythology. Bayo Adeyemi, nineteen, from Mushin, carrying the Aṣẹ of every Orisha at once.</p>
+            <div class="tag-row"><span class="tag tag--canon">Owned IP</span><span class="tag tag--live">Live</span></div>
+          </div>
         </a>
         <a class="card" href="https://github.com/farouqagboola94-max/catalyst-stack" rel="noopener">
           <h4>Forge</h4>
