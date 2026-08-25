@@ -16,8 +16,17 @@ A static, no-build website: the personal hub for the Catalyst world. It introduc
 
 ## What the pages do beyond static text
 
+- **The Doctrine Seal** — the signature element. Five law nodes on a pentagon
+  with a rotating legend ring; hovering, tapping or tabbing a node reports that
+  law in the panel beside it, and clicking jumps to the full text. The nodes are
+  ordinary anchors, so without JavaScript it is a static emblem that still links.
 - **Artwork plates** — hero and section backgrounds drawn from the Catalyst
-  artwork, laid under a legibility scrim (`.art-bg`).
+  artwork, laid under a legibility scrim (`.art-bg`), with a light parallax that
+  JavaScript opts into (never applied otherwise).
+- **Motion system** — `.reveal` (fade up), `.stagger` (children arrive in
+  sequence), `.mask` (display type wipes in), `.draw` (rules draw across), plus
+  a count-up on the stat band. All of it collapses under `prefers-reduced-motion`.
+- **Film grain** — a fixed SVG-noise plate over the page, inline as a data URI.
 - **Reading progress + section index** (doctrine) — a progress bar and a sticky
   `§00–§06` rail that highlights the section you are in. Every law also has its
   own anchor link, so `#law-own-the-source` is shareable.
@@ -119,3 +128,12 @@ cd site && grep -rl 'catalyst-world.netlify.app' . \
   sliced off. `.btn--ghost` uses a tint instead.
 - Above-the-fold plates use `decoding="sync"`, not `async`, so they paint with the
   first frame.
+- **A `.mask` element cannot observe itself.** Its `clip-path` collapses its own
+  intersection rectangle to zero, so IntersectionObserver never fires for it —
+  masks are watched through their parent element instead. If you add a new
+  self-hiding animation, watch a proxy, not the element.
+- The reveal observer is backed by a **sweep** that runs on every throttled scroll
+  frame, because anchor jumps and fast scrolling skip past elements entirely and
+  a one-shot observer leaves them hidden forever.
+- `.has-art > *` excludes both `.art-bg` and `.scroll-cue`: the rule sets
+  `position: relative`, which silently breaks any absolutely-positioned child.
