@@ -171,6 +171,97 @@
     }
   }
 
+
+  /* ------------------------------------------------------------------
+     The Aṣẹ Meter — six vessels, one dial
+     ------------------------------------------------------------------ */
+  var aseSvg = document.querySelector('#ase-meter');
+  var aseData = document.querySelector('[data-ase-data]');
+  if (aseSvg && aseData) {
+    var vessels;
+    try { vessels = JSON.parse(aseData.textContent); } catch (e) { vessels = null; }
+    if (vessels && vessels.length) {
+      var fill  = aseSvg.querySelector('[data-ase-fill]');
+      var nEl   = aseSvg.querySelector('[data-ase-n]');
+      var nameEl= aseSvg.querySelector('[data-ase-name]');
+      var alias = aseSvg.querySelector('[data-ase-alias]');
+      var title = aseSvg.querySelector('[data-ase-title]');
+      var axiom = aseSvg.querySelector('[data-ase-axiom]');
+      var stats = aseSvg.querySelector('[data-ase-stats]');
+      var aseNodes = aseSvg.querySelectorAll('.ase-node');
+      var circ  = parseFloat(fill.getAttribute('stroke-dasharray')) || 1005;
+      var cur = -1;
+
+      function showAse(i) {
+        var v = vessels[i]; if (!v || i === cur) return; cur = i;
+        var ase = v.stats['Aṣẹ'];
+        var offset = circ * (1 - Math.min(ase, 100) / 100);
+        fill.setAttribute('stroke-dashoffset', offset.toFixed(1));
+        nEl.textContent = ase;
+        nameEl.textContent = v.name;
+        alias.textContent = v.role + ' · ' + v.alias;
+        title.textContent = v.name;
+        axiom.textContent = '“' + v.body + '”';
+        stats.innerHTML = Object.keys(v.stats).map(function (k) {
+          return '<div class="ase-stat"><div class="n">' + v.stats[k] + '</div><div class="k">' + k + '</div></div>';
+        }).join('');
+        aseNodes.forEach(function (n, j) { n.classList.toggle('is-active', j === i); });
+      }
+
+      aseNodes.forEach(function (n, i) {
+        n.addEventListener('mouseenter', function () { showAse(i); });
+        n.addEventListener('focus', function () { showAse(i); });
+        n.addEventListener('touchstart', function () { showAse(i); }, { passive: true });
+        n.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showAse(i); }
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault(); aseNodes[(i + 1) % aseNodes.length].focus();
+          }
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault(); aseNodes[(i - 1 + aseNodes.length) % aseNodes.length].focus();
+          }
+        });
+      });
+      showAse(0);
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Mentorship application — mailto composer with real body,
+     because the raw form encoding leaks header syntax into subject
+     ------------------------------------------------------------------ */
+  var apply = document.querySelector('[data-apply-form]');
+  if (apply) {
+    apply.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var fd = new FormData(apply);
+      var name = (fd.get('Name') || '').toString().trim();
+      var track = (fd.get('Track') || '').toString();
+      var lines = [
+        'Name: '     + name,
+        'Email: '    + fd.get('Email'),
+        'Track: '    + track,
+        '',
+        '— What I already ship —',
+        (fd.get('What_you_ship') || '').toString().trim(),
+        '',
+        '— The ceiling right now —',
+        (fd.get('Ceiling') || '').toString().trim(),
+        '',
+        '— What I would build in twelve weeks —',
+        (fd.get('Twelve_week_build') || '').toString().trim()
+      ];
+      var subject = 'Catalyst School · ' + track + (name ? ' · ' + name : '');
+      var href = 'mailto:catalystcomicstudio@gmail.com'
+               + '?subject=' + encodeURIComponent(subject)
+               + '&body='    + encodeURIComponent(lines.join('\n'));
+      var status = apply.querySelector('[data-apply-status]');
+      if (status) { status.hidden = false; }
+      // Give the status a beat to render, then hand off to the mail client
+      setTimeout(function () { window.location.href = href; }, 80);
+    });
+  }
+
   /* ------------------------------------------------------------------
      Section rail scroll-spy
      ------------------------------------------------------------------ */

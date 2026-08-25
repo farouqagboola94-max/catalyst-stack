@@ -858,3 +858,94 @@ a.card--media::after { top: auto; bottom: 1.35rem; }
 @keyframes cue { 0% { transform: translateX(-100%); } 55%,100% { transform: translateX(100%); } }
 @media (prefers-reduced-motion: reduce) { .scroll-cue i::after { animation: none; transform: none; opacity: .5; } }
 @media (max-width: 720px) { .scroll-cue { display: none; } }
+
+/* ==========================================================================
+   ASẸ METER — the interactive Aṣẹ balance for the six vessels
+   ========================================================================== */
+.ase-meter { display: grid; gap: clamp(1.75rem, 4vw, 3rem); grid-template-columns: minmax(0,1fr); align-items: start; }
+@media (min-width: 960px) { .ase-meter { grid-template-columns: minmax(280px, 380px) minmax(0,1fr); } }
+
+.ase-dial { position: relative; aspect-ratio: 1; max-width: 380px; margin-inline: auto; }
+.ase-dial svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ase-track { fill: none; stroke: var(--iron-grey); stroke-width: 6; }
+.ase-fill  { fill: none; stroke: var(--danfo-gold); stroke-width: 8; stroke-linecap: round;
+             transition: stroke-dashoffset .9s var(--ease-out), stroke .4s; }
+.ase-node { cursor: pointer; }
+.ase-node circle { fill: var(--e2); stroke: var(--iron-grey); stroke-width: 1.5; transition: stroke .3s, fill .3s; }
+.ase-node text { font-family: var(--display); font-size: 15px; fill: var(--ash-grey); text-anchor: middle; dominant-baseline: central; transition: fill .3s; pointer-events: none; }
+.ase-node:hover circle, .ase-node.is-active circle { fill: var(--danfo-gold); stroke: var(--danfo-gold); }
+.ase-node:hover text, .ase-node.is-active text { fill: var(--black); }
+.ase-dial .ase-center {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none;
+}
+.ase-dial .ase-center .n { font-family: var(--display); font-size: 3.8rem; line-height: .9; color: var(--danfo-gold); }
+.ase-dial .ase-center .k { font-family: var(--label); font-size: .7rem; letter-spacing: .28em; text-transform: uppercase; color: var(--ash-grey); margin-top: .35rem; }
+
+.ase-panel h3 { font-size: var(--t-xl); margin-bottom: .5rem; }
+.ase-panel .ase-alias { font-family: var(--label); font-size: var(--t-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--danfo-gold); }
+.ase-panel .ase-axiom { font-family: var(--serif); font-style: italic; font-size: var(--t-md); color: var(--bone-white); margin-block: 1rem 1.5rem; max-width: 46ch; }
+.ase-panel .ase-body { font-size: var(--t-sm); color: var(--text-muted); max-width: 52ch; }
+.ase-stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--rule); margin-top: 1.75rem; }
+.ase-stat { background: var(--bg); padding: 1rem .75rem; text-align: center; }
+.ase-stat .n { font-family: var(--display); font-size: 1.4rem; color: var(--danfo-gold); line-height: 1; }
+.ase-stat .k { font-family: var(--label); font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--iron-grey); margin-top: .35rem; }
+
+/* ==========================================================================
+   PROGRESS LEDGER — every project rendered as a checked row
+   ========================================================================== */
+.ledger { display: grid; gap: 0; margin-top: 2rem; border-top: 1px solid var(--rule); }
+.ledger-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center; gap: 1.25rem;
+  padding: 1.05rem 0; border-bottom: 1px solid var(--rule);
+  text-decoration: none; color: inherit; transition: background .25s;
+}
+.ledger-row:hover { background: rgba(244,184,0,.03); }
+.ledger-name { font-family: var(--label); font-size: var(--t-sm); font-weight: 600; letter-spacing: .04em; color: var(--bone-white); }
+.ledger-name small { display: block; font-family: var(--body); font-size: .78rem; font-weight: 400; letter-spacing: 0; color: var(--text-muted); margin-top: .2rem; }
+.ledger-badge { font-family: var(--label); font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; padding: .25rem .55rem; border: 1px solid var(--rule); color: var(--text-muted); }
+.ledger-badge--live { border-color: rgba(0,201,177,.45); color: var(--orisha-teal); }
+.ledger-badge--build{ border-color: rgba(244,184,0,.45); color: var(--danfo-gold); }
+.ledger-badge--seed { border-color: rgba(196,30,58,.45); color: var(--blood-red); }
+.ledger-arrow { color: var(--iron-grey); font-size: 1.05rem; transition: color .25s, transform .25s; }
+.ledger-row:hover .ledger-arrow { color: var(--danfo-gold); transform: translateX(4px); }
+
+/* ==========================================================================
+   BAD DAY PLAYBOOK — the response matrix as a set of cards
+   ========================================================================== */
+.playbook { display: grid; gap: 1px; background: var(--rule); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.play {
+  background: var(--e1); padding: clamp(1.2rem, 3vw, 1.75rem);
+  display: flex; flex-direction: column; gap: .75rem;
+  border-top: 3px solid var(--blood-red);
+  transition: background .3s, border-color .3s;
+}
+.play:hover { background: var(--e2); border-top-color: var(--danfo-gold); }
+.play h4 { color: var(--blood-red); font-size: .72rem; }
+.play h3 { font-size: var(--t-lg); }
+.play .play-move { font-family: var(--serif); font-style: italic; color: var(--bone-white); font-size: var(--t-sm); text-transform: none; }
+.play .play-face { font-size: .88rem; color: var(--text-muted); }
+.play .play-k { font-family: var(--label); font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--iron-grey); }
+
+/* ==========================================================================
+   APPLY FORM — the mentorship intake
+   ========================================================================== */
+.apply-form { display: grid; gap: 1.5rem; margin-top: 2rem; }
+.apply-field { display: grid; gap: .5rem; }
+.apply-field label {
+  font-family: var(--label); font-size: .68rem; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--danfo-gold);
+}
+.apply-field input, .apply-field select, .apply-field textarea {
+  background: var(--e1); border: 1px solid var(--rule); color: var(--bone-white);
+  padding: .85rem 1rem; font: inherit; font-size: 1rem;
+  transition: border-color .25s, background .25s;
+}
+.apply-field input:focus, .apply-field select:focus, .apply-field textarea:focus {
+  outline: none; border-color: var(--danfo-gold); background: var(--e2);
+}
+.apply-field textarea { min-height: 6.5rem; resize: vertical; line-height: 1.5; }
+.apply-field .hint { font-size: .78rem; color: var(--iron-grey); }
+.apply-row { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.apply-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: .5rem; }
+.apply-status { font-family: var(--label); font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--orisha-teal); }

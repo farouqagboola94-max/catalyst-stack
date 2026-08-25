@@ -29,7 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/bebas-neue-400.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/space-grotesk-400.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oswald-600.woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/catalyst.css">
+<link rel="stylesheet" href="/assets/css/catalyst.css?v=4">
 <script>document.documentElement.classList.add('js');</script>
 
 </head>
@@ -48,6 +48,7 @@
   <ul class="nav-links">
     <li><a href="/">The Cave</a></li>
     <li><a href="/doctrine.html">Doctrine</a></li>
+    <li><a href="/school.html">School</a></li>
     <li><a href="/work.html">Work</a></li>
     <li class="nav-optional"><a href="/universe.html" aria-current="page">Universe</a></li>
     <li><a class="nav-cta" href="/contact.html">Enter</a></li>
@@ -131,6 +132,64 @@
     </div>
   </section>
 
+
+  <!-- ASẸ METER -->
+  <section id="ase-meter">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:2.75rem;">
+        <p class="eyebrow">§ The System</p>
+        <h2 class="mask">The Aṣẹ meter</h2>
+        <p class="lede">Aṣẹ is not a superpower — it is a system with rules. Hover, tap or tab a vessel to see their balance across four axes: Aṣẹ, Speed, Combat, Intel.</p>
+      </div>
+
+      <div class="ase-meter reveal">
+        <div class="ase-dial">
+          <svg viewBox="0 0 400 400" role="img" aria-label="Aṣẹ meter">
+            <circle class="ase-track" cx="200" cy="200" r="160"/>
+            <circle class="ase-fill"  cx="200" cy="200" r="160"
+                    stroke-dasharray="1005.3" stroke-dashoffset="1005.3"
+                    transform="rotate(-90 200 200)" data-ase-fill/>
+      <g class="ase-node" data-vessel="0" role="button" tabindex="0" aria-label="Catalyst">
+        <circle cx="200.0" cy="60.0" r="26"/>
+        <text x="200.0" y="60.0">C</text>
+      </g>
+      <g class="ase-node" data-vessel="1" role="button" tabindex="0" aria-label="Thunderstrike">
+        <circle cx="321.2" cy="130.0" r="26"/>
+        <text x="321.2" y="130.0">T</text>
+      </g>
+      <g class="ase-node" data-vessel="2" role="button" tabindex="0" aria-label="Iron Wolf">
+        <circle cx="321.2" cy="270.0" r="26"/>
+        <text x="321.2" y="270.0">I</text>
+      </g>
+      <g class="ase-node" data-vessel="3" role="button" tabindex="0" aria-label="The Oracle">
+        <circle cx="200.0" cy="340.0" r="26"/>
+        <text x="200.0" y="340.0">T</text>
+      </g>
+      <g class="ase-node" data-vessel="4" role="button" tabindex="0" aria-label="River Song">
+        <circle cx="78.8" cy="270.0" r="26"/>
+        <text x="78.8" y="270.0">R</text>
+      </g>
+      <g class="ase-node" data-vessel="5" role="button" tabindex="0" aria-label="Storm Bride">
+        <circle cx="78.8" cy="130.0" r="26"/>
+        <text x="78.8" y="130.0">S</text>
+      </g>
+          </svg>
+          <div class="ase-center">
+            <div class="n" data-ase-n>97</div>
+            <div class="k">Aṣẹ · <span data-ase-name>Catalyst</span></div>
+          </div>
+        </div>
+
+        <div class="ase-panel" data-ase-panel>
+          <p class="ase-alias" data-ase-alias>Vessel of All Orishas · Bayo Adeyemi</p>
+          <h3 data-ase-title>Catalyst</h3>
+          <p class="ase-axiom" data-ase-axiom>&ldquo;The vessel who carries every Aṣẹ at once — the thing the cosmology says should not be survivable.&rdquo;</p>
+          <div class="ase-stats" data-ase-stats></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ARCS -->
   <section id="arcs">
     <div class="wrap">
@@ -185,6 +244,7 @@
         <ul>
           <li><a href="/">The Cave</a></li>
           <li><a href="/doctrine.html">The Doctrine</a></li>
+          <li><a href="/school.html">The School</a></li>
           <li><a href="/work.html">The Work</a></li>
           <li><a href="/universe.html">The Universe</a></li>
           <li><a href="/contact.html">Enter</a></li>
@@ -215,6 +275,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/catalyst.js" defer></script>
+<script type="application/json" data-ase-data>[{"name": "Catalyst", "alias": "Bayo Adeyemi", "role": "Vessel of All Orishas", "body": "The vessel who carries every Aṣẹ at once — the thing the cosmology says should not be survivable.", "stats": {"Aṣẹ": 97, "Speed": 74, "Combat": 66, "Intel": 88}}, {"name": "Thunderstrike", "alias": "Amara Okafor", "role": "Ṣàngó's Chosen", "body": "Channels Ṣàngó through the talking drum — the rhythm is the conduit, not a flourish.", "stats": {"Aṣẹ": 78, "Speed": 91, "Combat": 83, "Intel": 72}}, {"name": "Iron Wolf", "alias": "Ikenna Chukwuemeka", "role": "Ògún's Iron", "body": "Living iron armour and the embodiment of Ògún. Heaviest hand in the circle; slowest to raise it.", "stats": {"Aṣẹ": 65, "Speed": 55, "Combat": 96, "Intel": 68}}, {"name": "The Oracle", "alias": "Chief Adesanya Adewale", "role": "Keeper of Ifá", "body": "Ancient keeper, master of Ifá wisdom. Decides how much of the war anyone is ready to hear.", "stats": {"Aṣẹ": 99, "Speed": 40, "Combat": 45, "Intel": 99}}, {"name": "River Song", "alias": "Ọ̀ṣun's Chosen", "role": "Waters of Lagos", "body": "The tide that pulls the city back into itself. Healing, judgement, patience carried as weapons.", "stats": {"Aṣẹ": 82, "Speed": 72, "Combat": 68, "Intel": 85}}, {"name": "Storm Bride", "alias": "Oya's Vessel", "role": "Wind of Change", "body": "Nine winds, one temper. Where she stands, the market shifts. Where she leaves, the gates close.", "stats": {"Aṣẹ": 86, "Speed": 94, "Combat": 80, "Intel": 78}}]</script>
+<script src="/assets/js/catalyst.js?v=4" defer></script>
 </body>
 </html>
